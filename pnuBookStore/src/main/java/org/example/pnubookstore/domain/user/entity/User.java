@@ -1,8 +1,10 @@
-package org.example.pnubookstore.domain;
+package org.example.pnubookstore.domain.user.entity;
 
 import java.util.Objects;
 
-import org.example.pnubookstore.domain.constant.Role;
+import org.example.pnubookstore.domain.base.AuditingEntity;
+import org.example.pnubookstore.domain.base.constant.Role;
+import org.hibernate.annotations.ColumnDefault;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,26 +23,34 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "user_tb")
-public class User extends AuditingEntity{
+public class User extends AuditingEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(nullable = false, unique = true)
-	private String username;
+	private String email;
 	@Column(nullable = false)
 	private String password;
-
 	@Column(nullable = false)
 	@Enumerated(value = EnumType.STRING)
 	private Role role;
 
+	@Column(nullable = false, length = 50, unique = true)
+	private String nickname;
+	@ColumnDefault("false")
+	private Boolean emailVerified = false;
+	@ColumnDefault("false")
+	private Boolean canSale = false;
+
+	// 판매와, 이메일 검증은 생성자에서 제외, 특정 조건에 의해서만 값 변경을 허가하기 위함.
 	@Builder
-	public User(Long id, String username, String password, Role role) {
+	public User(Long id, String email, String password, Role role, String nickname) {
 		this.id = id;
-		this.username = username;
+		this.email = email;
 		this.password = password;
 		this.role = role;
+		this.nickname = nickname;
 	}
 
 	@Override
@@ -50,12 +60,12 @@ public class User extends AuditingEntity{
 		if (o == null || getClass() != o.getClass())
 			return false;
 		User user = (User)o;
-		return Objects.equals(getId(), user.getId()) && Objects.equals(getUsername(),
-			user.getUsername());
+		return Objects.equals(getId(), user.getId()) && Objects.equals(getEmail(),
+			user.getEmail());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getId(), getUsername());
+		return Objects.hash(getId(), getEmail());
 	}
 }

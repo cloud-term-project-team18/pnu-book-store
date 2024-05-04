@@ -1,6 +1,6 @@
-package org.example.pnubookstore.service;
+package org.example.pnubookstore.domain.user.service;
 
-import org.example.pnubookstore.dto.CreateUserDto;
+import org.example.pnubookstore.domain.user.dto.CreateUserDto;
 import org.springframework.stereotype.Service;
 
 @Service

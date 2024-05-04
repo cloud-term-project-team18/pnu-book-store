@@ -2,11 +2,11 @@ package org.example.pnubookstore;
 
 import java.util.List;
 
-import org.example.pnubookstore.domain.Auction;
-import org.example.pnubookstore.domain.User;
-import org.example.pnubookstore.domain.constant.Role;
-import org.example.pnubookstore.repository.AuctionJpaRepository;
-import org.example.pnubookstore.repository.UserJpaRepository;
+import org.example.pnubookstore.willdelete.Auction;
+import org.example.pnubookstore.domain.user.entity.User;
+import org.example.pnubookstore.domain.base.constant.Role;
+import org.example.pnubookstore.willdelete.repository.AuctionJpaRepository;
+import org.example.pnubookstore.domain.user.repository.UserJpaRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,8 +25,9 @@ public class TestCase implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		User user = User.builder()
-			.username("taeho")
+			.email("rjsdnxogh12@pusan.ac.kr")
 			.password(passwordEncoder.encode("qwer1234"))
+			.nickname("taeho")
 			.role(Role.ROLE_USER)
 			.build();
 		userJpaRepository.save(user);

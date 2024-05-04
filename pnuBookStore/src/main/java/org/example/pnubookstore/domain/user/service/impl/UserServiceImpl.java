@@ -1,12 +1,13 @@
-package org.example.pnubookstore.service.impl;
+package org.example.pnubookstore.domain.user.service.impl;
 
 import org.example.pnubookstore.core.exception.BaseExceptionStatus;
 import org.example.pnubookstore.core.exception.Exception400;
-import org.example.pnubookstore.dto.CreateUserDto;
-import org.example.pnubookstore.repository.UserJpaRepository;
-import org.example.pnubookstore.service.UserService;
-import org.example.pnubookstore.domain.User;
-import org.example.pnubookstore.domain.constant.Role;
+import org.example.pnubookstore.domain.user.UserExceptionStatus;
+import org.example.pnubookstore.domain.user.dto.CreateUserDto;
+import org.example.pnubookstore.domain.user.repository.UserJpaRepository;
+import org.example.pnubookstore.domain.user.service.UserService;
+import org.example.pnubookstore.domain.user.entity.User;
+import org.example.pnubookstore.domain.base.constant.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,12 +22,12 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional
 	public void createUser(CreateUserDto userDto) {
-		if (userJpaRepository.existsByUsername(userDto.username())){
-			throw new Exception400(BaseExceptionStatus.USERNAME_ALREADY_USED);
+		if (userJpaRepository.existsByEmail(userDto.email())){
+			throw new Exception400(UserExceptionStatus.USERNAME_ALREADY_USED);
 		}
 
 		userJpaRepository.save(User.builder()
-			.username(userDto.username())
+			.email(userDto.email())
 			.password(passwordEncoder.encode(userDto.password()))
 			.role(Role.ROLE_USER)
 			.build());

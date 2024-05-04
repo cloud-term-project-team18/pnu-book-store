@@ -1,4 +1,4 @@
-package org.example.pnubookstore.domain.constant;
+package org.example.pnubookstore.domain.base.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
-package org.example.pnubookstore.dto;
+package org.example.pnubookstore.domain.user.dto;
 
 public record CreateUserDto(
-	String username,
+	String email,
 	String password
 ) {
 }

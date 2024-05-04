@@ -1,7 +1,7 @@
 package org.example.pnubookstore.controller;
 
-import org.example.pnubookstore.dto.CreateUserDto;
-import org.example.pnubookstore.service.UserService;
+import org.example.pnubookstore.domain.user.dto.CreateUserDto;
+import org.example.pnubookstore.domain.user.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;

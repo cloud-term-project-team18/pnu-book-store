@@ -1,4 +1,4 @@
-package org.example.pnubookstore.dto;
+package org.example.pnubookstore.domain.user.dto;
 
 import jakarta.validation.constraints.NotNull;
 
