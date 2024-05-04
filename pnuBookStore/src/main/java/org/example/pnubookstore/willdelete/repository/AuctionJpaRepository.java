@@ -1,8 +1,8 @@
-package org.example.pnubookstore.repository;
+package org.example.pnubookstore.willdelete.repository;
 
 import java.util.Optional;
 
-import org.example.pnubookstore.domain.Auction;
+import org.example.pnubookstore.willdelete.Auction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

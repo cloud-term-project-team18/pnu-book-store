@@ -1,9 +1,9 @@
-package org.example.pnubookstore.service;
+package org.example.pnubookstore.willdelete.service;
 
 import java.util.List;
 
-import org.example.pnubookstore.dto.AuctionBoardDto;
-import org.example.pnubookstore.dto.AuctionDetailDto;
+import org.example.pnubookstore.willdelete.dto.AuctionBoardDto;
+import org.example.pnubookstore.willdelete.dto.AuctionDetailDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 

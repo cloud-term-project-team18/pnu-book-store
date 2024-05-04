@@ -1,4 +1,4 @@
-package org.example.pnubookstore.dto;
+package org.example.pnubookstore.willdelete.dto;
 
 public record AuctionBoardDto(
 	Long id,

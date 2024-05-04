@@ -1,9 +1,9 @@
-package org.example.pnubookstore.dto;
+package org.example.pnubookstore.willdelete.dto;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import org.example.pnubookstore.domain.Auction;
+import org.example.pnubookstore.willdelete.Auction;
 
 import lombok.Builder;
 

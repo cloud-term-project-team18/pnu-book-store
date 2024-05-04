@@ -1,4 +1,4 @@
-package org.example.pnubookstore.domain;
+package org.example.pnubookstore.willdelete;
 
 import java.util.Objects;
 
