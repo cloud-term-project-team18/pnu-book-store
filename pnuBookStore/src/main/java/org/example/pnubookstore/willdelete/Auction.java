@@ -2,6 +2,9 @@ package org.example.pnubookstore.domain;
 
 import java.util.Objects;
 
+import org.example.pnubookstore.domain.base.AuditingEntity;
+import org.example.pnubookstore.domain.user.entity.User;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name="auction_tb")
-public class Auction extends AuditingEntity{
+public class Auction extends AuditingEntity {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 

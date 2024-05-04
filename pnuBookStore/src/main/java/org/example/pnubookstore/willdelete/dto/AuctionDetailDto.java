@@ -22,7 +22,7 @@ public record AuctionDetailDto(
 
 	public static AuctionDetailDto of(Auction auction) {
 		return AuctionDetailDto.builder()
-			.writer(auction.getUser().getUsername())
+			.writer(auction.getUser().getEmail())
 			.title(auction.getTitle())
 			.description(auction.getDescription())
 			.createAt(auction.getCreatedAt()
