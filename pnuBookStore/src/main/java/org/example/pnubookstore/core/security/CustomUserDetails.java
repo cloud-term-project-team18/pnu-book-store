@@ -3,7 +3,7 @@ package org.example.pnubookstore.core.security;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.example.pnubookstore.domain.User;
+import org.example.pnubookstore.domain.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,7 +29,7 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return user.getUsername();
+		return user.getEmail();
 	}
 
 	@Override

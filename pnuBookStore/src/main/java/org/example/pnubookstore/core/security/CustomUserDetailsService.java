@@ -1,7 +1,8 @@
 package org.example.pnubookstore.core.security;
 
 import org.example.pnubookstore.core.exception.BaseExceptionStatus;
-import org.example.pnubookstore.repository.UserJpaRepository;
+import org.example.pnubookstore.domain.user.UserExceptionStatus;
+import org.example.pnubookstore.domain.user.repository.UserJpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return new CustomUserDetails(userJpaRepository.findByUsername(username)
-			.orElseThrow(() -> new UsernameNotFoundException(BaseExceptionStatus.USER_NOT_FOUND.getErrorMessage())));
+		return new CustomUserDetails(userJpaRepository.findByEmail(username)
+			.orElseThrow(() -> new UsernameNotFoundException(UserExceptionStatus.USER_NOT_FOUND.getErrorMessage())));
 	}
 }
