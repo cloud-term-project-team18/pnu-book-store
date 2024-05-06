@@ -9,7 +9,7 @@
 <div th:replace="~{fragments/header :: header}"></div>
 <div class="container mt-5">
     <div class="hero-unit text-center">
-        <h1>부산대 전공서적 거래 사이트</h1>
+        <h1>부산대학교 전공서적 거래 사이트</h1>
         <div th:if="${#authorization.expression('!isAuthenticated()')}">
             <a href="/signUp" th:href="@{/signUp}" class="btn btn-large btn-primary">Sign up</a>
             <a href="/login" th:href="@{/login}" class="btn btn-large btn-success">Sign in</a>
