@@ -40,8 +40,18 @@ public class ProductService {
                 .orElseThrow(() -> new Exception404(ProductExceptionStatus.USER_NOT_FOUND.getErrorMessage()));
 
         Subject findSubject = subjectJpaRepository.findBySubjectNameAndDepartmentAndProfessor(
-                createProductDto.getSubjectName(), createProductDto.getDepartment(), createProductDto.getProfessor())
-                .orElseThrow(() -> new Exception404(ProductExceptionStatus.SUBJECT_NOT_FOUND.getErrorMessage()));
+                createProductDto.getSubjectName(), createProductDto.getDepartment(), createProductDto.getProfessor());
+
+        if (findSubject == null){
+            findSubject = subjectJpaRepository.save(
+                    Subject.builder()
+                            .subjectName(createProductDto.getSubjectName())
+                            .professor(createProductDto.getProfessor())
+                            .department(createProductDto.getDepartment())
+                            .build()
+            );
+        }
+
 
         Product createProduct = productJpaRepository.save(
                 Product.builder()

@@ -67,11 +67,11 @@ public class TestCase implements ApplicationRunner {
 		);
 		auctionJpaRepository.saveAll(auctions);
 
-		subjectJpaRepository.save(Subject.builder()
-						.subjectName("c++")
-						.professor("park")
-						.department("computer")
-						.build());
+//		subjectJpaRepository.save(Subject.builder()
+//						.subjectName("c++")
+//						.professor("park")
+//						.department("computer")
+//						.build());
 
 		CreateProductDto createProductDto = CreateProductDto.builder()
 				.sellerEmail("rjsdnxogh12@pusan.ac.kr")
