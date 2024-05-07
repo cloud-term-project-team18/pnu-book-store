@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.pnubookstore.core.exception.Exception404;
 import org.example.pnubookstore.domain.product.dto.CreateProductDto;
 import org.example.pnubookstore.domain.product.ProductExceptionStatus;
+import org.example.pnubookstore.domain.product.dto.FindProductDto;
 import org.example.pnubookstore.domain.product.entity.Product;
 import org.example.pnubookstore.domain.product.entity.ProductPicture;
 import org.example.pnubookstore.domain.product.entity.Subject;
@@ -15,7 +16,7 @@ import org.example.pnubookstore.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,6 +29,7 @@ public class ProductService {
     private final ProductPictureJpaRepository productPictureJpaRepository;
 
     @Transactional
+    // 물품 등록
     public void createProduct(CreateProductDto createProductDto){
         final String tempUrl = "http://example.com";
 
@@ -63,5 +65,17 @@ public class ProductService {
                         .build());
     }
 
+    // 물품 찾기
+    public FindProductDto findProduct(Long productId){
+        Product findProduct = productJpaRepository.findById(productId)
+                .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
 
+        List<String> productPictureUrlList = productPictureJpaRepository.findAllByProduct(findProduct)
+                .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_PICTURES_NOT_FOUND.getErrorMessage()))
+                .stream()
+                .map(ProductPicture::getUrl)
+                .toList();
+
+        return FindProductDto.of(findProduct, productPictureUrlList);
+    }
 }
