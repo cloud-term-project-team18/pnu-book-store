@@ -42,6 +42,8 @@ public class Product extends AuditingEntity {
 
 	@Column(nullable = false)
 	private String productName;
+	@Column(nullable = false)
+	private Integer price;
 	@Column(columnDefinition = "TEXT")
 	private String description;
 	@Column(nullable = false)
@@ -69,13 +71,14 @@ public class Product extends AuditingEntity {
 	private Boolean damage;
 
 	@Builder
-	public Product(Long id, User seller, Subject subject, String productName, String description, String author,
+	public Product(Long id, User seller, Subject subject, String productName, Integer price, String description, String author,
 		LocalDateTime pubDate, Boolean isBargain, String canBargainReason, SaleStatus saleStatus, UseStatus underline,
 		UseStatus note, Boolean naming, Boolean discolor, Boolean damage) {
 		this.id = id;
 		this.seller = seller;
 		this.subject = subject;
 		this.productName = productName;
+		this.price = price;
 		this.description = description;
 		this.author = author;
 		this.pubDate = pubDate;

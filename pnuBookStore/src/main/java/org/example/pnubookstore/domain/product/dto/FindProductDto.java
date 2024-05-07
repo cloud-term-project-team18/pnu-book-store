@@ -19,6 +19,7 @@ public class FindProductDto {
     private String professor;
     private String department;
     private String productName;
+    private Integer price;
     private String description;
     private String author;
     private LocalDateTime pubDate;
@@ -39,6 +40,7 @@ public class FindProductDto {
                 .professor(product.getSubject().getProfessor())
                 .department(product.getSubject().getDepartment())
                 .productName(product.getProductName())
+                .price(product.getPrice())
                 .description(product.getDescription())
                 .author(product.getAuthor())
                 .pubDate(product.getPubDate())

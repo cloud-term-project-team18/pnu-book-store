@@ -20,6 +20,7 @@ public class CreateProductDto {
 
     private String sellerEmail;
     private String productName;
+    private Integer price;
     private String description;
     private String author;
     private LocalDateTime pubDate;

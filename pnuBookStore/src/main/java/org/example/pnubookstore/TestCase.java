@@ -5,13 +5,10 @@ import java.util.List;
 
 import org.example.pnubookstore.domain.product.dto.CreateProductDto;
 import org.example.pnubookstore.domain.product.dto.FindProductDto;
-import org.example.pnubookstore.domain.product.entity.Product;
-import org.example.pnubookstore.domain.product.entity.ProductPicture;
+import org.example.pnubookstore.domain.product.dto.FindProductsDto;
 import org.example.pnubookstore.domain.product.entity.Subject;
 import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
 import org.example.pnubookstore.domain.product.entity.constant.UseStatus;
-import org.example.pnubookstore.domain.product.repository.ProductJpaRepository;
-import org.example.pnubookstore.domain.product.repository.ProductPictureJpaRepository;
 import org.example.pnubookstore.domain.product.repository.SubjectJpaRepository;
 import org.example.pnubookstore.domain.product.service.ProductService;
 import org.example.pnubookstore.willdelete.Auction;
@@ -33,8 +30,6 @@ public class TestCase implements ApplicationRunner {
 	private final AuctionJpaRepository auctionJpaRepository;
 	private final UserJpaRepository userJpaRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final ProductPictureJpaRepository productPictureJpaRepository;
-	private final ProductJpaRepository productJpaRepository;
 	private final ProductService productService;
 	private final SubjectJpaRepository subjectJpaRepository;
 
@@ -81,6 +76,7 @@ public class TestCase implements ApplicationRunner {
 		CreateProductDto createProductDto = CreateProductDto.builder()
 				.sellerEmail("rjsdnxogh12@pusan.ac.kr")
 				.productName("book1")
+				.price(10000)
 				.description("something")
 				.author("kim")
 				.pubDate(LocalDateTime.now())
@@ -98,8 +94,15 @@ public class TestCase implements ApplicationRunner {
 				.build();
 
 		productService.createProduct(createProductDto);
-		FindProductDto findProductDto = productService.findProduct(1L);
+		productService.createProduct(createProductDto);
+//		FindProductDto findProductDto = productService.findProduct(1L);
 //		System.out.printf(findProductDto.toString());
+
+		List<FindProductsDto> findProductDtoList = productService.findProductList();
+
+		for (FindProductsDto dto : findProductDtoList){
+			System.out.println(dto.toString());
+		}
 
 
 	}

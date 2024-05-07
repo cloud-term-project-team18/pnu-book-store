@@ -5,6 +5,7 @@ import org.example.pnubookstore.core.exception.Exception404;
 import org.example.pnubookstore.domain.product.dto.CreateProductDto;
 import org.example.pnubookstore.domain.product.ProductExceptionStatus;
 import org.example.pnubookstore.domain.product.dto.FindProductDto;
+import org.example.pnubookstore.domain.product.dto.FindProductsDto;
 import org.example.pnubookstore.domain.product.entity.Product;
 import org.example.pnubookstore.domain.product.entity.ProductPicture;
 import org.example.pnubookstore.domain.product.entity.Subject;
@@ -13,9 +14,11 @@ import org.example.pnubookstore.domain.product.repository.ProductPictureJpaRepos
 import org.example.pnubookstore.domain.product.repository.SubjectJpaRepository;
 import org.example.pnubookstore.domain.product.repository.UserJpaRepositoryForProduct;
 import org.example.pnubookstore.domain.user.entity.User;
+import org.hibernate.annotations.processing.Find;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,6 +48,7 @@ public class ProductService {
                     .seller(findSeller)
                     .subject(findSubject)
                     .productName(createProductDto.getProductName())
+                        .price(createProductDto.getPrice())
                     .description(createProductDto.getDescription())
                     .author(createProductDto.getAuthor())
                     .pubDate(createProductDto.getPubDate())
@@ -65,7 +69,7 @@ public class ProductService {
                         .build());
     }
 
-    // 물품 찾기
+    // 물품 조회
     public FindProductDto findProduct(Long productId){
         Product findProduct = productJpaRepository.findById(productId)
                 .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
@@ -78,4 +82,21 @@ public class ProductService {
 
         return FindProductDto.of(findProduct, productPictureUrlList);
     }
+
+    public List<FindProductsDto> findProductList(){
+        List<Product> productList = productJpaRepository.findAll();
+
+        List<FindProductsDto> findProductsDtoList = new ArrayList<>();
+
+        for (Product product : productList){
+            String pictureUrl = productPictureJpaRepository.findFirstByProduct(product).getUrl();
+
+            findProductsDtoList.add(
+                    new FindProductsDto(product.getProductName(), product.getAuthor(), product.getPrice(), pictureUrl)
+            );
+        }
+
+        return findProductsDtoList;
+    }
+
 }
