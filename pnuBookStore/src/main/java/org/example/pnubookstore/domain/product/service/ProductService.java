@@ -6,6 +6,7 @@ import org.example.pnubookstore.domain.product.dto.CreateProductDto;
 import org.example.pnubookstore.domain.product.ProductExceptionStatus;
 import org.example.pnubookstore.domain.product.dto.FindProductDto;
 import org.example.pnubookstore.domain.product.dto.FindProductsDto;
+import org.example.pnubookstore.domain.product.dto.UpdateProductDto;
 import org.example.pnubookstore.domain.product.entity.Product;
 import org.example.pnubookstore.domain.product.entity.ProductPicture;
 import org.example.pnubookstore.domain.product.entity.Subject;
@@ -36,63 +37,44 @@ public class ProductService {
     public void createProduct(CreateProductDto createProductDto){
         final String tempUrl = "http://example.com";
 
-        User findSeller = userJpaRepositoryForProduct.findUserByEmail(createProductDto.getSellerEmail())
-                .orElseThrow(() -> new Exception404(ProductExceptionStatus.USER_NOT_FOUND.getErrorMessage()));
+        // 유저 존재 여부 체크(추후 변경될 수 있음)
+        User findedSeller = findUser(createProductDto);
 
-        Subject findSubject = subjectJpaRepository.findBySubjectNameAndDepartmentAndProfessor(
-                createProductDto.getSubjectName(), createProductDto.getDepartment(), createProductDto.getProfessor());
+        // 과목 존재 여부 체크
+        Subject findedSubject = findSubject(createProductDto);
 
-        if (findSubject == null){
-            findSubject = subjectJpaRepository.save(
-                    Subject.builder()
-                            .subjectName(createProductDto.getSubjectName())
-                            .professor(createProductDto.getProfessor())
-                            .department(createProductDto.getDepartment())
-                            .build()
-            );
+        // 과목이 존재하지 않을 시 과목 저장)
+        if (findedSubject == null){
+            findedSubject = saveSubject(createProductDto);
         }
 
+        // 물품 저장
+        Product createdProduct = saveProduct(createProductDto, findedSeller, findedSubject);
 
-        Product createProduct = productJpaRepository.save(
-                Product.builder()
-                    .seller(findSeller)
-                    .subject(findSubject)
-                    .productName(createProductDto.getProductName())
-                        .price(createProductDto.getPrice())
-                    .description(createProductDto.getDescription())
-                    .author(createProductDto.getAuthor())
-                    .pubDate(createProductDto.getPubDate())
-                    .isBargain(createProductDto.getIsBargain())
-                    .canBargainReason(createProductDto.getCanBargainReason())
-                    .saleStatus(createProductDto.getSaleStatus())
-                    .underline(createProductDto.getUnderline())
-                    .note(createProductDto.getNote())
-                    .naming(createProductDto.getNaming())
-                    .discolor(createProductDto.getDiscolor())
-                    .damage(createProductDto.getDamage())
-                    .build());
-
+        // 물품 사진 저장(추후 변경 예정)
         productPictureJpaRepository.save(
                 ProductPicture.builder()
                         .url(tempUrl)
-                        .product(createProduct)
+                        .product(createdProduct)
                         .build());
     }
 
     // 물품 조회
     public FindProductDto findProduct(Long productId){
-        Product findProduct = productJpaRepository.findById(productId)
+        Product findedProduct = productJpaRepository.findById(productId)
                 .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
 
-        List<String> productPictureUrlList = productPictureJpaRepository.findAllByProduct(findProduct)
+        List<String> productPictureUrlList = productPictureJpaRepository.findAllByProduct(findedProduct)
                 .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_PICTURES_NOT_FOUND.getErrorMessage()))
                 .stream()
                 .map(ProductPicture::getUrl)
                 .toList();
 
-        return FindProductDto.of(findProduct, productPictureUrlList);
+        return FindProductDto.of(findedProduct, productPictureUrlList);
     }
 
+    // 물품 리스트 조회
+    // 물품명, 가격, 저자, 물품 이미지
     public List<FindProductsDto> findProductList(){
         List<Product> productList = productJpaRepository.findAll();
 
@@ -109,4 +91,57 @@ public class ProductService {
         return findProductsDtoList;
     }
 
+    @Transactional
+    public void updateProduct(Long productId, CreateProductDto updateProductDto){
+        findUser(updateProductDto);
+
+        Product findedProduct = productJpaRepository.findById(productId)
+                .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
+
+        Subject findedSubject = findSubject(updateProductDto);
+
+        findedProduct.updateProduct(updateProductDto, findedSubject);
+
+        // 이미지 변경
+    }
+
+    private User findUser(CreateProductDto createProductDto){
+        return userJpaRepositoryForProduct.findUserByEmail(createProductDto.getSellerEmail())
+                .orElseThrow(() -> new Exception404(ProductExceptionStatus.USER_NOT_FOUND.getErrorMessage()));
+    }
+
+    private Subject findSubject(CreateProductDto createProductDto){
+        return subjectJpaRepository.findBySubjectNameAndDepartmentAndProfessor(
+                createProductDto.getSubjectName(), createProductDto.getDepartment(), createProductDto.getProfessor());
+    }
+
+    private Subject saveSubject(CreateProductDto createProductDto){
+        return subjectJpaRepository.save(
+                Subject.builder()
+                        .subjectName(createProductDto.getSubjectName())
+                        .professor(createProductDto.getProfessor())
+                        .department(createProductDto.getDepartment())
+                        .build());
+    }
+
+    private Product saveProduct(CreateProductDto createProductDto, User seller, Subject subject){
+        return productJpaRepository.save(
+                Product.builder()
+                        .seller(seller)
+                        .subject(subject)
+                        .productName(createProductDto.getProductName())
+                        .price(createProductDto.getPrice())
+                        .description(createProductDto.getDescription())
+                        .author(createProductDto.getAuthor())
+                        .pubDate(createProductDto.getPubDate())
+                        .isBargain(createProductDto.getIsBargain())
+                        .canBargainReason(createProductDto.getCanBargainReason())
+                        .saleStatus(createProductDto.getSaleStatus())
+                        .underline(createProductDto.getUnderline())
+                        .note(createProductDto.getNote())
+                        .naming(createProductDto.getNaming())
+                        .discolor(createProductDto.getDiscolor())
+                        .damage(createProductDto.getDamage())
+                        .build());
+    }
 }

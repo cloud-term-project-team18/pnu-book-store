@@ -6,6 +6,7 @@ import java.util.List;
 import org.example.pnubookstore.domain.product.dto.CreateProductDto;
 import org.example.pnubookstore.domain.product.dto.FindProductDto;
 import org.example.pnubookstore.domain.product.dto.FindProductsDto;
+import org.example.pnubookstore.domain.product.entity.Product;
 import org.example.pnubookstore.domain.product.entity.Subject;
 import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
 import org.example.pnubookstore.domain.product.entity.constant.UseStatus;
@@ -95,14 +96,32 @@ public class TestCase implements ApplicationRunner {
 
 		productService.createProduct(createProductDto);
 		productService.createProduct(createProductDto);
-//		FindProductDto findProductDto = productService.findProduct(1L);
-//		System.out.printf(findProductDto.toString());
+		FindProductDto findProductDto = productService.findProduct(1L);
+		System.out.printf(findProductDto.toString());
 
-		List<FindProductsDto> findProductDtoList = productService.findProductList();
 
-		for (FindProductsDto dto : findProductDtoList){
-			System.out.println(dto.toString());
-		}
+		CreateProductDto updateProductDto = CreateProductDto.builder()
+				.sellerEmail("rjsdnxogh12@pusan.ac.kr")
+				.productName("book2")
+				.price(1)
+				.description("something")
+				.author("kim")
+				.pubDate(LocalDateTime.now())
+				.isBargain(true)
+				.canBargainReason("any")
+				.saleStatus(SaleStatus.NOT_YET)
+				.underline(UseStatus.NO)
+				.note(UseStatus.NO)
+				.naming(true)
+				.discolor(true)
+				.damage(true)
+				.subjectName("c++")
+				.professor("park")
+				.department("computer")
+				.build();
+		productService.updateProduct(1L, updateProductDto);
+
+
 
 
 	}

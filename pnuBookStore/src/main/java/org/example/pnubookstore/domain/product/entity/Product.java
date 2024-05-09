@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import org.example.pnubookstore.domain.base.AuditingEntity;
+import org.example.pnubookstore.domain.product.dto.CreateProductDto;
 import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
 import org.example.pnubookstore.domain.product.entity.constant.UseStatus;
 import org.example.pnubookstore.domain.user.entity.User;
@@ -106,5 +107,22 @@ public class Product extends AuditingEntity {
 	@Override
 	public int hashCode() {
 		return Objects.hash(getId(), getProductName());
+	}
+
+	public void updateProduct(CreateProductDto productDto, Subject subject){
+		this.subject = subject;
+		this.productName = productDto.getProductName();
+		this.price = productDto.getPrice();
+		this.description = productDto.getDescription();
+		this.author = productDto.getAuthor();
+		this.pubDate = productDto.getPubDate();
+		this.isBargain = productDto.getIsBargain();
+		this.canBargainReason = productDto.getCanBargainReason();
+		this.saleStatus = productDto.getSaleStatus();
+		this.underline = productDto.getUnderline();
+		this.note = productDto.getNote();
+		this.naming = productDto.getDiscolor();
+		this.discolor = productDto.getDiscolor();
+		this.damage = productDto.getDamage();
 	}
 }
