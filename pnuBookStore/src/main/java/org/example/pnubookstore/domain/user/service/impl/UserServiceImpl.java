@@ -1,13 +1,20 @@
 package org.example.pnubookstore.domain.user.service.impl;
 
+import jakarta.mail.internet.MimeMessage;
+import java.util.UUID;
 import org.example.pnubookstore.core.exception.BaseExceptionStatus;
 import org.example.pnubookstore.core.exception.Exception400;
 import org.example.pnubookstore.domain.user.UserExceptionStatus;
 import org.example.pnubookstore.domain.user.dto.CreateUserDto;
+import org.example.pnubookstore.domain.user.entity.EmailVerification;
+import org.example.pnubookstore.domain.user.repository.UserEmailVerificationRedisRepository;
 import org.example.pnubookstore.domain.user.repository.UserJpaRepository;
+import org.example.pnubookstore.domain.user.service.UserEmailVerificationService;
 import org.example.pnubookstore.domain.user.service.UserService;
 import org.example.pnubookstore.domain.user.entity.User;
 import org.example.pnubookstore.domain.base.constant.Role;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,17 +26,28 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements UserService {
 	private final UserJpaRepository userJpaRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final UserEmailVerificationService userEmailVerificationService;
+	private final UserEmailVerificationRedisRepository userEmailVerificationRedisRepository;
 
 	@Transactional
 	public void createUser(CreateUserDto userDto) {
+		// 이미 존재하는 이메일인지 확인
 		if (userJpaRepository.existsByEmail(userDto.email())){
 			throw new Exception400(UserExceptionStatus.USERNAME_ALREADY_USED);
 		}
 
-		userJpaRepository.save(User.builder()
+		// 회원 생성
+		User user =  userJpaRepository.save(User.builder()
 			.email(userDto.email())
 			.password(passwordEncoder.encode(userDto.password()))
 			.role(Role.ROLE_USER)
 			.build());
+
+		// 회원 임시 uuid 생성
+		String uuid = UUID.randomUUID().toString();
+		// uuid와 id를 redis에 저장
+		userEmailVerificationRedisRepository.save(new EmailVerification(uuid, user.getId()));
+		// 유저의 암호화된 id가 담긴 링크 보내기
+		userEmailVerificationService.sendVerifyEmail(uuid, user.getEmail());
 	}
 }

@@ -12,25 +12,26 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class UserController {
-	private final UserService userService;
+    private final UserService userService;
 
-	@GetMapping("/")
-	public String index() {
-		return "index";
-	}
+    @GetMapping("/")
+    public String index() {
+        return "index";
+    }
 
-	@GetMapping("/login")
-	public String loginPage() {
-		return "login";
-	}
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
 
-	@GetMapping("/signUp")
-	public String signUpPage() {
-		return "signUp";
-	}
-	@PostMapping("/signUp")
-	public String createUser(@ModelAttribute CreateUserDto userDto) {
-		userService.createUser(userDto);
-		return "redirect:/";
-	}
+    @GetMapping("/signUp")
+    public String signUpPage() {
+
+        return "signUp";
+    }
+    @PostMapping("/signUp")
+    public String createUser(@ModelAttribute CreateUserDto userDto) {
+        userService.createUser(userDto);
+        return "redirect:/";
+    }
 }
