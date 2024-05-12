@@ -79,6 +79,7 @@ public class TestCase implements ApplicationRunner {
 				.productName("book1")
 				.price(10000)
 				.description("something")
+				.college("something")
 				.author("kim")
 				.pubDate(LocalDateTime.now())
 				.isBargain(true)
@@ -105,6 +106,7 @@ public class TestCase implements ApplicationRunner {
 				.productName("book2")
 				.price(1)
 				.description("something")
+				.college("something")
 				.author("kim")
 				.pubDate(LocalDateTime.now())
 				.isBargain(true)
@@ -120,9 +122,6 @@ public class TestCase implements ApplicationRunner {
 				.department("computer")
 				.build();
 		productService.updateProduct(1L, updateProductDto);
-
-
-
 
 	}
 }
