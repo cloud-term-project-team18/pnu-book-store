@@ -61,7 +61,7 @@ public class ProductService {
 
     // 물품 조회
     public FindProductDto findProduct(Long productId){
-        Product findedProduct = productJpaRepository.findById(productId)
+        Product findedProduct = productJpaRepository.findByIdFetchJoin(productId)
                 .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
 
         List<String> productPictureUrlList = productPictureJpaRepository.findAllByProduct(findedProduct)
@@ -111,8 +111,11 @@ public class ProductService {
     }
 
     private Subject findSubject(CreateProductDto createProductDto){
-        return subjectJpaRepository.findBySubjectNameAndDepartmentAndProfessor(
-                createProductDto.getSubjectName(), createProductDto.getDepartment(), createProductDto.getProfessor());
+        return subjectJpaRepository.findBySubjectNameAndCollegeAndDepartmentAndProfessor(
+                createProductDto.getSubjectName(),
+                createProductDto.getCollege(),
+                createProductDto.getDepartment(),
+                createProductDto.getProfessor());
     }
 
     private Subject saveSubject(CreateProductDto createProductDto){
@@ -120,6 +123,7 @@ public class ProductService {
                 Subject.builder()
                         .subjectName(createProductDto.getSubjectName())
                         .professor(createProductDto.getProfessor())
+                        .college(createProductDto.getCollege())
                         .department(createProductDto.getDepartment())
                         .build());
     }

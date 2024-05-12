@@ -27,13 +27,16 @@ public class Subject extends AuditingEntity {
 	@Column(nullable = false)
 	private String professor;
 	@Column(nullable = false)
+	private String college;
+	@Column(nullable = false)
 	private String department;
 
 	@Builder
-	public Subject(Long id, String subjectName, String professor, String department) {
+	public Subject(Long id, String subjectName, String professor, String college, String department) {
 		this.id = id;
 		this.subjectName = subjectName;
 		this.professor = professor;
+		this.college = college;
 		this.department = department;
 	}
 
@@ -46,11 +49,12 @@ public class Subject extends AuditingEntity {
 		Subject subject = (Subject)o;
 		return Objects.equals(getId(), subject.getId()) && Objects.equals(getSubjectName(),
 			subject.getSubjectName()) && Objects.equals(getProfessor(), subject.getProfessor())
-			&& Objects.equals(getDepartment(), subject.getDepartment());
+			&& Objects.equals(getCollege(), subject.getCollege()) && Objects.equals(getDepartment(),
+			subject.getDepartment());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getId(), getSubjectName(), getProfessor(), getDepartment());
+		return Objects.hash(getId(), getSubjectName(), getProfessor(), getCollege(), getDepartment());
 	}
 }

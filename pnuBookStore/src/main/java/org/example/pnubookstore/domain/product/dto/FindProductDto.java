@@ -17,6 +17,7 @@ public class FindProductDto {
     private String sellerName;
     private String subjectName;
     private String professor;
+    private String college;
     private String department;
     private String productName;
     private Integer price;
@@ -38,6 +39,7 @@ public class FindProductDto {
                 .sellerName(product.getSeller().getNickname())
                 .subjectName(product.getSubject().getSubjectName())
                 .professor(product.getSubject().getProfessor())
+                .college(product.getSubject().getCollege())
                 .department(product.getSubject().getDepartment())
                 .productName(product.getProductName())
                 .price(product.getPrice())
