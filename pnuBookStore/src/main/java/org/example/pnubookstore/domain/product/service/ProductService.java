@@ -111,8 +111,8 @@ public class ProductService {
     }
 
     private Subject findSubject(CreateProductDto createProductDto){
-        return subjectJpaRepository.findBySubjectNameAndDepartmentAndProfessor(
-                createProductDto.getSubjectName(), createProductDto.getDepartment(), createProductDto.getProfessor());
+        return subjectJpaRepository.findBySubjectNameAndCollegeAndDepartmentAndProfessor(
+                createProductDto.getSubjectName(), createProductDto.getCollege(), createProductDto.getDepartment(), createProductDto.getProfessor());
     }
 
     private Subject saveSubject(CreateProductDto createProductDto){
