@@ -2,6 +2,7 @@ package org.example.pnubookstore.domain.product.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.pnubookstore.core.exception.Exception404;
+import org.example.pnubookstore.core.s3.S3Uploader;
 import org.example.pnubookstore.domain.product.dto.CreateProductDto;
 import org.example.pnubookstore.domain.product.ProductExceptionStatus;
 import org.example.pnubookstore.domain.product.dto.FindProductDto;
@@ -18,7 +19,9 @@ import org.example.pnubookstore.domain.user.entity.User;
 import org.hibernate.annotations.processing.Find;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,10 +34,11 @@ public class ProductService {
     private final UserJpaRepositoryForProduct userJpaRepositoryForProduct;
     private final SubjectJpaRepository subjectJpaRepository;
     private final ProductPictureJpaRepository productPictureJpaRepository;
+    private final S3Uploader s3Uploader;
 
     @Transactional
     // 물품 등록
-    public void createProduct(CreateProductDto createProductDto){
+    public void createProduct(CreateProductDto createProductDto, List<MultipartFile> imageFiles) throws IOException {
         final String tempUrl = "http://example.com";
 
         // 유저 존재 여부 체크(추후 변경될 수 있음)
@@ -52,11 +56,7 @@ public class ProductService {
         Product createdProduct = saveProduct(createProductDto, findedSeller, findedSubject);
 
         // 물품 사진 저장(추후 변경 예정)
-        productPictureJpaRepository.save(
-                ProductPicture.builder()
-                        .url(tempUrl)
-                        .product(createdProduct)
-                        .build());
+        saveImages(imageFiles, createdProduct);
     }
 
     // 물품 조회
@@ -143,5 +143,16 @@ public class ProductService {
                         .discolor(createProductDto.getDiscolor())
                         .damage(createProductDto.getDamage())
                         .build());
+    }
+
+    private void saveImages(List<MultipartFile> imageFiles, Product product) throws IOException {
+        for(MultipartFile imageFile : imageFiles){
+            String imageUrl = s3Uploader.uploadFile(imageFile);
+            productPictureJpaRepository.save(
+                    ProductPicture.builder()
+                            .url(imageUrl)
+                            .product(product)
+                            .build());
+        }
     }
 }
