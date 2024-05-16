@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import org.example.pnubookstore.domain.base.AuditingEntity;
+import org.example.pnubookstore.domain.product.dto.CreateProductDto;
 import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
 import org.example.pnubookstore.domain.product.entity.constant.UseStatus;
 import org.example.pnubookstore.domain.user.entity.User;
@@ -42,6 +43,8 @@ public class Product extends AuditingEntity {
 
 	@Column(nullable = false)
 	private String productName;
+	@Column(nullable = false)
+	private Integer price;
 	@Column(columnDefinition = "TEXT")
 	private String description;
 	@Column(nullable = false)
@@ -69,13 +72,14 @@ public class Product extends AuditingEntity {
 	private Boolean damage;
 
 	@Builder
-	public Product(Long id, User seller, Subject subject, String productName, String description, String author,
+	public Product(Long id, User seller, Subject subject, String productName, Integer price, String description, String author,
 		LocalDateTime pubDate, Boolean isBargain, String canBargainReason, SaleStatus saleStatus, UseStatus underline,
 		UseStatus note, Boolean naming, Boolean discolor, Boolean damage) {
 		this.id = id;
 		this.seller = seller;
 		this.subject = subject;
 		this.productName = productName;
+		this.price = price;
 		this.description = description;
 		this.author = author;
 		this.pubDate = pubDate;
@@ -103,5 +107,22 @@ public class Product extends AuditingEntity {
 	@Override
 	public int hashCode() {
 		return Objects.hash(getId(), getProductName());
+	}
+
+	public void updateProduct(CreateProductDto productDto, Subject subject){
+		this.subject = subject;
+		this.productName = productDto.getProductName();
+		this.price = productDto.getPrice();
+		this.description = productDto.getDescription();
+		this.author = productDto.getAuthor();
+		this.pubDate = productDto.getPubDate();
+		this.isBargain = productDto.getIsBargain();
+		this.canBargainReason = productDto.getCanBargainReason();
+		this.saleStatus = productDto.getSaleStatus();
+		this.underline = productDto.getUnderline();
+		this.note = productDto.getNote();
+		this.naming = productDto.getDiscolor();
+		this.discolor = productDto.getDiscolor();
+		this.damage = productDto.getDamage();
 	}
 }
