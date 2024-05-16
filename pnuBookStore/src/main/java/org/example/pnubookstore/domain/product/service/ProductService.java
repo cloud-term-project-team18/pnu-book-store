@@ -84,7 +84,7 @@ public class ProductService {
             String pictureUrl = productPictureJpaRepository.findFirstByProduct(product).getUrl();
 
             findProductsDtoList.add(
-                    new FindProductsDto(product.getProductName(), product.getAuthor(), product.getPrice(), pictureUrl)
+                    new FindProductsDto(product.getProductName(), pictureUrl, product.getSeller().getNickname(), product.getPrice(), product.getIsBargain())
             );
         }
 
