@@ -13,6 +13,8 @@ import org.example.pnubookstore.domain.user.service.UserEmailVerificationService
 import org.example.pnubookstore.domain.user.service.UserService;
 import org.example.pnubookstore.domain.user.entity.User;
 import org.example.pnubookstore.domain.base.constant.Role;
+import org.hibernate.cfg.Environment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,6 +37,7 @@ public class UserServiceImpl implements UserService {
 		if (userJpaRepository.existsByEmail(userDto.email())){
 			throw new Exception400(UserExceptionStatus.USERNAME_ALREADY_USED);
 		}
+		//
 
 		// 회원 생성
 		User user =  userJpaRepository.save(User.builder()
@@ -47,7 +50,26 @@ public class UserServiceImpl implements UserService {
 		String uuid = UUID.randomUUID().toString();
 		// uuid와 id를 redis에 저장
 		userEmailVerificationRedisRepository.save(new EmailVerification(uuid, user.getId()));
-		// 유저의 암호화된 id가 담긴 링크 보내기
-		userEmailVerificationService.sendVerifyEmail(uuid, user.getEmail());
+		//
+
+	}
+
+	public void emailVerify(String email){
+		boolean matched = email.matches("^[a-zA-Z0-9._%+-]+@pusan\\.ac\\.kr$");
+		if(!matched){
+			throw new IllegalArgumentException("유효 하지 않은 메일 형식 입니다");
+		}
+
+		userEmailVerificationService.sendVerifyEmail(email);
+	}
+
+	@Override
+	public void afterEmailForm() {
+
+	}
+
+	@Override
+	public void login() {
+
 	}
 }
