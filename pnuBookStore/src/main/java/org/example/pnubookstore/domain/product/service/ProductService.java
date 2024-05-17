@@ -39,8 +39,6 @@ public class ProductService {
     @Transactional
     // 물품 등록
     public void createProduct(CreateProductDto createProductDto, List<MultipartFile> imageFiles) throws IOException {
-        final String tempUrl = "http://example.com";
-
         // 유저 존재 여부 체크(추후 변경될 수 있음)
         User findedSeller = findUser(createProductDto);
 
@@ -102,7 +100,7 @@ public class ProductService {
 
         findedProduct.updateProduct(updateProductDto, findedSubject);
 
-        // 이미지 변경
+        // 이미지 변경 - 추가 예정(안했었네요...)
     }
 
     private User findUser(CreateProductDto createProductDto){
