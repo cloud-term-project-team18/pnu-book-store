@@ -24,10 +24,10 @@ public class UserEmailVerificationService {
         // 존재하는 유저인 경우 DB에서 verified = true로 변경
     }
 
-    public void sendVerifyEmail(String uuid, String email){
+    public void sendVerifyEmail(String email){
         String subject = "인증 메일";
         String content = "메일 테스트 내용";
-        content += "<a href=\"" + "http://localhost:8080/user/verify?encryptedUser=" + uuid + "\">링크 클릭</a>";
+        content += "<a href=\"http://localhost:8080/signUp/after-email\">링크 클릭</a>";
         String from = "pnuauction@gmail.com";
         String to = email;
 

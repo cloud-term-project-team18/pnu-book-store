@@ -14,7 +14,7 @@ public class JavaMailSenderConfig {
     private String host;
 
     @Value("${spring.mail.port}")
-    private Integer port;
+    private int port;
 
     @Value("${spring.mail.username}")
     private String adminMail;
@@ -22,14 +22,24 @@ public class JavaMailSenderConfig {
     @Value("${spring.mail.password}")
     private String adminPassword;
 
+
     @Bean
     public JavaMailSender javaMailService() {
         final JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setHost(host);
-        javaMailSender.setUsername(adminMail);
-        javaMailSender.setPassword(adminPassword);
-        javaMailSender.setPort(port);
-        javaMailSender.setJavaMailProperties(getMailProperties());
+        javaMailSender.setHost("smtp.gmail.com");
+        javaMailSender.setUsername("pnuauction@gmail.com");
+        javaMailSender.setPassword("dwdkwjuyorcdvlxm");
+        javaMailSender.setPort(587);
+//        javaMailSender.setJavaMailProperties(getMailProperties());
+        javaMailSender.setProtocol("smtp");
+
+        Properties properties = javaMailSender.getJavaMailProperties();
+        properties.put("mail.transport.protocol", "smtp");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.debug", "true");
+
+
         return javaMailSender;
     }
 
