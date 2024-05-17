@@ -43,11 +43,12 @@ spring:
     username: pnuauction@gmail.com
     password: dwdkwjuyorcdvlxm
     properties:
+      mail.smtp.starttls.enable: true
       mail:
+        debug: true
         smtp:
           starttls:
             enable: true
-            requred: true
           auth: true
           connectiontimeout: 5000
           timeout: 5000
