@@ -59,7 +59,7 @@ public class ProductService {
 
     // 물품 조회
     public FindProductDto findProduct(Long productId){
-        Product findedProduct = productJpaRepository.findById(productId)
+        Product findedProduct = productJpaRepository.findByIdFetchJoin(productId)
                 .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
 
         List<String> productPictureUrlList = productPictureJpaRepository.findAllByProduct(findedProduct)
