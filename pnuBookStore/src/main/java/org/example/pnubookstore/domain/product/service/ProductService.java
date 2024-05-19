@@ -105,6 +105,14 @@ public class ProductService {
         saveImages(imageFiles, findedProduct);
     }
 
+    @Transactional
+    public void deleteProduct(Long productId){
+        Product findedProduct = productJpaRepository.findById(productId)
+                        .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
+        productPictureJpaRepository.deleteAllByProduct(findedProduct);
+        productJpaRepository.delete(findedProduct);
+    }
+
     private User findUser(CreateProductDto createProductDto){
         return userJpaRepositoryForProduct.findUserByEmail(createProductDto.getSellerEmail())
                 .orElseThrow(() -> new Exception404(ProductExceptionStatus.USER_NOT_FOUND.getErrorMessage()));

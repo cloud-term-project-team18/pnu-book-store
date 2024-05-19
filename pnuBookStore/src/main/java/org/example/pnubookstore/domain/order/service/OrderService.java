@@ -11,15 +11,18 @@ import org.example.pnubookstore.domain.order.repository.UserJpaRepositoryForOrde
 import org.example.pnubookstore.domain.product.entity.Product;
 import org.example.pnubookstore.domain.user.entity.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class OrderService {
 
     private final OrderJpaRepository orderJpaRepository;
     private final ProductJpaRepositoryForOrder productJpaRepositoryForOrder;
     private final UserJpaRepositoryForOrder userJpaRepositoryForOrder;
 
+    @Transactional
     public void createOrder(CreateOrderDto createOrderDto){
         Product findedProduct = productJpaRepositoryForOrder.findById(createOrderDto.getProductId())
                         .orElseThrow(() -> new Exception404(OrderExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
@@ -41,4 +44,6 @@ public class OrderService {
                 .money(createOrderDto.getMoney())
                 .build());
     }
+
+
 }
