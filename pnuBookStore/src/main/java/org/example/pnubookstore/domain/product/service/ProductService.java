@@ -90,7 +90,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void updateProduct(Long productId, CreateProductDto updateProductDto){
+    public void updateProduct(Long productId, CreateProductDto updateProductDto, List<MultipartFile> imageFiles) throws IOException {
         findUser(updateProductDto);
 
         Product findedProduct = productJpaRepository.findById(productId)
@@ -100,7 +100,9 @@ public class ProductService {
 
         findedProduct.updateProduct(updateProductDto, findedSubject);
 
-        // 이미지 변경 - 추가 예정(안했었네요...)
+        // 이미지 변경
+        productPictureJpaRepository.deleteAllByProduct(findedProduct);
+        saveImages(imageFiles, findedProduct);
     }
 
     private User findUser(CreateProductDto createProductDto){

@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface ProductPictureJpaRepository extends JpaRepository<ProductPicture, Long> {
     Optional<List<ProductPicture>> findAllByProduct(Product product);
     ProductPicture findFirstByProduct(Product product);
+
+    void deleteAllByProduct(Product product);
 }
