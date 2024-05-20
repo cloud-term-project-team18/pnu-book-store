@@ -26,10 +26,14 @@ public class JavaMailSenderConfig {
     @Bean
     public JavaMailSender javaMailService() {
         final JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setHost("smtp.gmail.com");
-        javaMailSender.setUsername("pnuauction@gmail.com");
-        javaMailSender.setPassword("dwdkwjuyorcdvlxm");
-        javaMailSender.setPort(587);
+        System.out.println(host);
+        System.out.println(port);
+        System.out.println(adminMail);
+        System.out.println(adminPassword);
+        javaMailSender.setHost(host);
+        javaMailSender.setUsername(adminMail);
+        javaMailSender.setPassword(adminPassword);
+        javaMailSender.setPort(port);
 //        javaMailSender.setJavaMailProperties(getMailProperties());
         javaMailSender.setProtocol("smtp");
 
