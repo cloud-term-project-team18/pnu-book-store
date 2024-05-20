@@ -13,6 +13,6 @@ public class EmailTest {
     private UserEmailVerificationService userEmailVerificationService = new UserEmailVerificationService(javaMailSender);
     @Test
     public void emailSendTest(){
-        userEmailVerificationService.sendVerifyEmail("paulmoon00@pusan.ac.kr");
+//        userEmailVerificationService.sendVerifyEmail("testtestest@pusan.ac.kr");
     }
 }
