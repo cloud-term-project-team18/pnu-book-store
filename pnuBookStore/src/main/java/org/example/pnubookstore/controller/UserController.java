@@ -38,14 +38,15 @@ public class UserController {
     }
 
     @GetMapping("/signUp/after-email")
-    public String afterEmail(){
+    public String afterEmail(@RequestParam String uuid){
+
         return "afterEmail";
     }
-    @PostMapping("/signUp")
-    public String createUser(@ModelAttribute CreateUserDto userDto) {
-        userService.createUser(userDto);
-        return "redirect:/";
-    }
+//    @PostMapping("/signUp")
+//    public String createUser(@ModelAttribute CreateUserDto userDto) {
+//        userService.createUser(userDto);
+//        return "redirect:/";
+//    }
 
     @PostMapping("/signUp/after-email-form")
     public String afterEmailForm(@RequestBody CreateUserDto request){

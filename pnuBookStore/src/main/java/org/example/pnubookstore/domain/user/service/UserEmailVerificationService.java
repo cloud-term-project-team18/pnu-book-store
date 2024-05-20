@@ -17,8 +17,7 @@ public class UserEmailVerificationService {
         this.javaMailSender = javaMailSender;
     }
 
-    @GetMapping("/user/verify")
-    public void userEmailVerify(@RequestParam String encryptedUser){
+    public void userEmailVerify( String encryptedUser){
         // 파라미터로 넘겨준 정보를 레디스에서 실제로 있는 유저인지 검색
 
         // 존재하는 유저인 경우 DB에서 verified = true로 변경
