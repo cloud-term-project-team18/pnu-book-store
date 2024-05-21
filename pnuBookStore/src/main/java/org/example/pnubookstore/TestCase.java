@@ -3,6 +3,10 @@ package org.example.pnubookstore;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.example.pnubookstore.core.exception.Exception404;
+import org.example.pnubookstore.domain.order.dto.CreateOrderDto;
+import org.example.pnubookstore.domain.order.service.OrderService;
+import org.example.pnubookstore.domain.product.ProductExceptionStatus;
 import org.example.pnubookstore.domain.product.dto.CreateProductDto;
 import org.example.pnubookstore.domain.product.dto.FindProductDto;
 import org.example.pnubookstore.domain.product.dto.FindProductsDto;
@@ -10,6 +14,7 @@ import org.example.pnubookstore.domain.product.entity.Product;
 import org.example.pnubookstore.domain.product.entity.Subject;
 import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
 import org.example.pnubookstore.domain.product.entity.constant.UseStatus;
+import org.example.pnubookstore.domain.product.repository.ProductJpaRepository;
 import org.example.pnubookstore.domain.product.repository.SubjectJpaRepository;
 import org.example.pnubookstore.domain.product.service.ProductService;
 import org.example.pnubookstore.willdelete.Auction;
@@ -33,6 +38,8 @@ public class TestCase implements ApplicationRunner {
 	private final PasswordEncoder passwordEncoder;
 	private final ProductService productService;
 	private final SubjectJpaRepository subjectJpaRepository;
+	private final ProductJpaRepository productJpaRepository;
+	private final OrderService orderService;
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
@@ -43,6 +50,13 @@ public class TestCase implements ApplicationRunner {
 			.role(Role.ROLE_USER)
 			.build();
 		userJpaRepository.save(user);
+		User user1 = User.builder()
+				.email("rjsdnxogh13@pusan.ac.kr")
+				.password(passwordEncoder.encode("qwer1234"))
+				.nickname("taeho1")
+				.role(Role.ROLE_USER)
+				.build();
+		userJpaRepository.save(user1);
 
 		List<Auction> auctions = List.of(
 			Auction.builder().user(user).title("제목1").description("설명1").build(),
@@ -67,61 +81,44 @@ public class TestCase implements ApplicationRunner {
 			Auction.builder().user(user).title("제목20").description("설명20").build()
 		);
 		auctionJpaRepository.saveAll(auctions);
-
+//
 //		subjectJpaRepository.save(Subject.builder()
 //						.subjectName("c++")
+//						.college("something")
 //						.professor("park")
 //						.department("computer")
 //						.build());
+//
+//		CreateProductDto createProductDto = CreateProductDto.builder()
+//				.sellerEmail("rjsdnxogh12@pusan.ac.kr")
+//				.productName("book1")
+//				.price(10000)
+//				.description("something")
+//				.college("something")
+//				.author("kim")
+//				.pubDate(LocalDateTime.now())
+//				.isBargain(true)
+//				.canBargainReason("any")
+//				.saleStatus(SaleStatus.NOT_YET)
+//				.underline(UseStatus.NO)
+//				.note(UseStatus.NO)
+//				.naming(true)
+//				.discolor(true)
+//				.damage(true)
+//				.subjectName("c++")
+//				.professor("park")
+//				.department("computer")
+//				.build();
+////
+//		productService.createProduct(createProductDto);
+//		Product product = productJpaRepository.findByIdFetchJoin(1L)
+//						.orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
+//		productService.deleteProduct(product.getId());
 
-		CreateProductDto createProductDto = CreateProductDto.builder()
-				.sellerEmail("rjsdnxogh12@pusan.ac.kr")
-				.productName("book1")
-				.price(10000)
-				.description("something")
-				.college("something")
-				.author("kim")
-				.pubDate(LocalDateTime.now())
-				.isBargain(true)
-				.canBargainReason("any")
-				.saleStatus(SaleStatus.NOT_YET)
-				.underline(UseStatus.NO)
-				.note(UseStatus.NO)
-				.naming(true)
-				.discolor(true)
-				.damage(true)
-				.subjectName("c++")
-				.professor("park")
-				.department("computer")
-				.build();
-
-		productService.createProduct(createProductDto);
-		productService.createProduct(createProductDto);
-		FindProductDto findProductDto = productService.findProduct(1L);
-		System.out.printf(findProductDto.toString());
+//		CreateOrderDto createOrderDto = new CreateOrderDto(1L, "taeho", "taeho1", 10);
+//		orderService.createOrder(createOrderDto);
 
 
-		CreateProductDto updateProductDto = CreateProductDto.builder()
-				.sellerEmail("rjsdnxogh12@pusan.ac.kr")
-				.productName("book2")
-				.price(1)
-				.description("something")
-				.college("something")
-				.author("kim")
-				.pubDate(LocalDateTime.now())
-				.isBargain(true)
-				.canBargainReason("any")
-				.saleStatus(SaleStatus.NOT_YET)
-				.underline(UseStatus.NO)
-				.note(UseStatus.NO)
-				.naming(true)
-				.discolor(true)
-				.damage(true)
-				.subjectName("c++")
-				.professor("park")
-				.department("computer")
-				.build();
-		productService.updateProduct(1L, updateProductDto);
 
 	}
 }

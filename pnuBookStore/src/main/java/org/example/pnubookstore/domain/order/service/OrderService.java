@@ -45,6 +45,7 @@ public class OrderService {
                 .build());
     }
 
+    @Transactional
     void deleteOrder(Long orderId){
         orderJpaRepository.deleteById(orderId);
     }
