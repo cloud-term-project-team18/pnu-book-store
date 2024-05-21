@@ -38,7 +38,7 @@ public class ProductService {
 
     @Transactional
     // 물품 등록
-    public void createProduct(CreateProductDto createProductDto, List<MultipartFile> imageFiles) throws IOException {
+    public void createProduct(CreateProductDto createProductDto) throws IOException {
         // 유저 존재 여부 체크(추후 변경될 수 있음)
         User findedSeller = findUser(createProductDto);
 
@@ -54,7 +54,7 @@ public class ProductService {
         Product createdProduct = saveProduct(createProductDto, findedSeller, findedSubject);
 
         // 물품 사진 저장(추후 변경 예정)
-        saveImages(imageFiles, createdProduct);
+        saveImages(createProductDto.getProductPictureList(), createdProduct);
     }
 
     // 물품 조회
@@ -90,7 +90,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void updateProduct(Long productId, CreateProductDto updateProductDto, List<MultipartFile> imageFiles) throws IOException {
+    public void updateProduct(Long productId, CreateProductDto updateProductDto) throws IOException {
         findUser(updateProductDto);
 
         Product findedProduct = productJpaRepository.findById(productId)
@@ -102,7 +102,7 @@ public class ProductService {
 
         // 이미지 변경
         productPictureJpaRepository.deleteAllByProduct(findedProduct);
-        saveImages(imageFiles, findedProduct);
+        saveImages(updateProductDto.getProductPictureList(), findedProduct);
     }
 
     @Transactional

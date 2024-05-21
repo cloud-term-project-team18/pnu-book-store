@@ -9,8 +9,10 @@ import org.example.pnubookstore.domain.product.entity.Subject;
 import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
 import org.example.pnubookstore.domain.product.entity.constant.UseStatus;
 import org.example.pnubookstore.domain.user.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -40,4 +42,5 @@ public class CreateProductDto {
 
     // 아직 이미지는 넣지 않은 상태
     // 이미지는 리스트로
+    private List<MultipartFile> productPictureList;
 }
