@@ -17,4 +17,7 @@ public interface SubjectJpaRepository extends JpaRepository<Subject, Long> {
 
     @Query("SELECT s.department FROM Subject s WHERE s.college = :college")
     List<String> findDepartments(@Param("college") String college);
+
+    @Query("SELECT s.professor FROM Subject s WHERE s.college = :college AND s.department = :department")
+    List<String> findProfessors(@Param("college") String college, @Param("department") String department);
 }
