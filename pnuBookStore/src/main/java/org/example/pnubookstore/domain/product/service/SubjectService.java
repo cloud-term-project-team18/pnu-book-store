@@ -25,4 +25,8 @@ public class SubjectService {
     public List<String> findProfessors(String college, String department){
         return subjectJpaRepository.findProfessors(college, department);
     }
+
+    public List<String> findSubjectNames(String college, String department, String professor){
+        return subjectJpaRepository.findSubjectNames(college, department, professor);
+    }
 }
