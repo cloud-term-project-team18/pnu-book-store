@@ -12,16 +12,16 @@ public interface SubjectJpaRepository extends JpaRepository<Subject, Long> {
     Subject findBySubjectNameAndCollegeAndDepartmentAndProfessor(
             String subjectName, String college, String department, String professor);
 
-    @Query("SELECT s.college FROM Subject s")
+    @Query("SELECT DISTINCT s.college FROM Subject s")
     List<String> findColleges();
 
-    @Query("SELECT s.department FROM Subject s WHERE s.college = :college")
+    @Query("SELECT DISTINCT s.department FROM Subject s WHERE s.college = :college")
     List<String> findDepartments(@Param("college") String college);
 
-    @Query("SELECT s.professor FROM Subject s WHERE s.college = :college AND s.department = :department")
+    @Query("SELECT DISTINCT s.professor FROM Subject s WHERE s.college = :college AND s.department = :department")
     List<String> findProfessors(@Param("college") String college, @Param("department") String department);
 
-    @Query("SELECT s.subjectName FROM Subject s WHERE " +
+    @Query("SELECT DISTINCT s.subjectName FROM Subject s WHERE " +
             "s.college = :college AND s.department = :department AND s.professor = :professor")
     List<String> findSubjectNames(@Param("college") String college,
                                   @Param("department") String department,
