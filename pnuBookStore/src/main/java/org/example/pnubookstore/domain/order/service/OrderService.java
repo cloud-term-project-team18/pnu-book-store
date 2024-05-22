@@ -9,6 +9,7 @@ import org.example.pnubookstore.domain.order.repository.OrderJpaRepository;
 import org.example.pnubookstore.domain.order.repository.ProductJpaRepositoryForOrder;
 import org.example.pnubookstore.domain.order.repository.UserJpaRepositoryForOrder;
 import org.example.pnubookstore.domain.product.entity.Product;
+import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
 import org.example.pnubookstore.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,8 @@ public class OrderService {
     public void createOrder(CreateOrderDto createOrderDto){
         Product findedProduct = productJpaRepositoryForOrder.findById(createOrderDto.getProductId())
                         .orElseThrow(() -> new Exception404(OrderExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
+
+        findedProduct.changeSaleStatus(SaleStatus.SOLD);
 
         if(createOrderDto.getBuyerNickname().equals(createOrderDto.getSellerNickname())){
             throw new Exception404(OrderExceptionStatus.SAME_SELLER_BUYER.getErrorMessage());
@@ -49,6 +52,8 @@ public class OrderService {
     void deleteOrder(Long orderId){
         orderJpaRepository.deleteById(orderId);
     }
+
+
 
 
 }

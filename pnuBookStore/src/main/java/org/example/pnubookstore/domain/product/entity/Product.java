@@ -120,4 +120,8 @@ public class Product extends AuditingEntity {
 		this.discolor = productDto.getDiscolor();
 		this.damage = productDto.getDamage();
 	}
+
+	public void changeSaleStatus(SaleStatus saleStatus) {
+		this.saleStatus = saleStatus;
+	}
 }
