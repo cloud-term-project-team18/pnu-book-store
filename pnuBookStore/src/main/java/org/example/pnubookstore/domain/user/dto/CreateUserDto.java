@@ -8,6 +8,7 @@ public record CreateUserDto(
 	@Pattern(regexp = "^[a-zA-Z0-9._%+-]+@pusan\\.ac\\.kr$")
 	@NotNull
 	String email,
-	String password
+	String password,
+	String nickname
 ) {
 }

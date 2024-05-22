@@ -45,7 +45,7 @@ spring:
     properties:
       mail.smtp.starttls.enable: true
       mail:
-        debug: true
+        debug: false
         smtp:
           starttls:
             enable: true

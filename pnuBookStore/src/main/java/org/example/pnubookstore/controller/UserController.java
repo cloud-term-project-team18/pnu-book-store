@@ -2,8 +2,11 @@ package org.example.pnubookstore.controller;
 
 import jakarta.validation.constraints.Null;
 import org.example.pnubookstore.domain.user.dto.CreateUserDto;
+import org.example.pnubookstore.domain.user.entity.EmailVerification;
+import org.example.pnubookstore.domain.user.service.UserEmailVerificationService;
 import org.example.pnubookstore.domain.user.service.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final UserEmailVerificationService userEmailVerificationService;
 
     @GetMapping("/")
     public String index() {
@@ -30,33 +34,35 @@ public class UserController {
     @GetMapping("/signUp")
     public String signUpPage() {
 
-        return "signUp";
+        return "email-verification";
     }
-    @GetMapping("/signUp/email-verify")
-    public void emailVerify(@RequestParam String email){
+    @PostMapping("/sendVerificationCode")
+    public String emailVerify(@RequestParam String email){
+
         userService.emailVerify(email);
+
+        return "index"; // 이메일 전송이 완료됐다는 표시, 리다이렉트
     }
 
     @GetMapping("/signUp/after-email")
-    public String afterEmail(@RequestParam String uuid){
+    public String afterEmail(@RequestParam String uuid, Model model){
+        // 유효한 uuid인지 확인
+        EmailVerification email = userEmailVerificationService.isUserEmailValid(uuid);
 
-        return "afterEmail";
+        // not valid
+        if(email == null){
+            return "index";
+        }
+
+        model.addAttribute("email", email.getEmail());
+        return "signUp";
     }
-//    @PostMapping("/signUp")
-//    public String createUser(@ModelAttribute CreateUserDto userDto) {
-//        userService.createUser(userDto);
-//        return "redirect:/";
-//    }
 
-    @PostMapping("/signUp/after-email-form")
-    public String afterEmailForm(@RequestBody CreateUserDto request){
-        userService.afterEmailForm();
+
+    @PostMapping("/signUp")
+    public String afterEmailForm(@ModelAttribute CreateUserDto request){
+        userService.createUser(request);
         return "redirect:/";
     }
 
-    @PostMapping("/login")
-    public String login(){
-
-        return "";
-    }
 }

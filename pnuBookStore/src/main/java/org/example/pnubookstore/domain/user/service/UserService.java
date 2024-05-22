@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
 public interface UserService {
 	void createUser(CreateUserDto createUserDto);
 	void emailVerify(String email);
-	void afterEmailForm();
-	void login();
+//	void afterEmailForm(CreateUserDto createUserDto);
+
 }
