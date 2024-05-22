@@ -11,6 +11,7 @@ import org.example.pnubookstore.domain.product.dto.UpdateProductDto;
 import org.example.pnubookstore.domain.product.entity.Product;
 import org.example.pnubookstore.domain.product.entity.ProductPicture;
 import org.example.pnubookstore.domain.product.entity.Subject;
+import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
 import org.example.pnubookstore.domain.product.repository.ProductJpaRepository;
 import org.example.pnubookstore.domain.product.repository.ProductPictureJpaRepository;
 import org.example.pnubookstore.domain.product.repository.SubjectJpaRepository;
@@ -144,7 +145,7 @@ public class ProductService {
                         .pubDate(createProductDto.getPubDate())
                         .isBargain(createProductDto.getIsBargain())
                         .canBargainReason(createProductDto.getCanBargainReason())
-                        .saleStatus(createProductDto.getSaleStatus())
+                        .saleStatus(SaleStatus.NOT_YET)
                         .underline(createProductDto.getUnderline())
                         .note(createProductDto.getNote())
                         .naming(createProductDto.getNaming())
