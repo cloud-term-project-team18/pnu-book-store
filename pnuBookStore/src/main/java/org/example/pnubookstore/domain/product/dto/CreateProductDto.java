@@ -29,7 +29,7 @@ public class CreateProductDto {
     private LocalDateTime pubDate;
     private Boolean isBargain;
     private String canBargainReason;
-    private SaleStatus saleStatus;
+//    private SaleStatus saleStatus;
     private UseStatus underline;
     private UseStatus note;
     private Boolean naming;

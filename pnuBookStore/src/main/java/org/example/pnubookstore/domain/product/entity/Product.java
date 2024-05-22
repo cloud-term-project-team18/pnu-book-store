@@ -118,7 +118,6 @@ public class Product extends AuditingEntity {
 		this.pubDate = productDto.getPubDate();
 		this.isBargain = productDto.getIsBargain();
 		this.canBargainReason = productDto.getCanBargainReason();
-		this.saleStatus = productDto.getSaleStatus();
 		this.underline = productDto.getUnderline();
 		this.note = productDto.getNote();
 		this.naming = productDto.getDiscolor();
