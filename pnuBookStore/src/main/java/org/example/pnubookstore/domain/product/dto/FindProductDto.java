@@ -9,11 +9,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString
 public class FindProductDto {
+    private Long id;
     private String sellerName;
     private String subjectName;
     private String professor;
@@ -36,6 +38,7 @@ public class FindProductDto {
 
     public static FindProductDto of(Product product, List<String> urlList){
         return FindProductDto.builder()
+                .id(product.getId())
                 .sellerName(product.getSeller().getNickname())
                 .subjectName(product.getSubject().getSubjectName())
                 .professor(product.getSubject().getProfessor())

@@ -55,7 +55,7 @@ public class ProductService {
         Product createdProduct = saveProduct(createProductDto, findedSeller, findedSubject);
 
         // 물품 사진 저장(추후 변경 예정)
-        saveImages(createProductDto.getProductPictureList(), createdProduct);
+//        saveImages(createProductDto.getProductPictureList(), createdProduct);
     }
 
     // 물품 조회
