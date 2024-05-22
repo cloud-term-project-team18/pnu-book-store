@@ -8,14 +8,12 @@ import org.example.pnubookstore.domain.product.ProductExceptionStatus;
 import org.example.pnubookstore.domain.product.dto.FindProductDto;
 import org.example.pnubookstore.domain.product.dto.FindProductsDto;
 import org.example.pnubookstore.domain.product.dto.UpdateProductDto;
+import org.example.pnubookstore.domain.product.entity.Location;
 import org.example.pnubookstore.domain.product.entity.Product;
 import org.example.pnubookstore.domain.product.entity.ProductPicture;
 import org.example.pnubookstore.domain.product.entity.Subject;
 import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
-import org.example.pnubookstore.domain.product.repository.ProductJpaRepository;
-import org.example.pnubookstore.domain.product.repository.ProductPictureJpaRepository;
-import org.example.pnubookstore.domain.product.repository.SubjectJpaRepository;
-import org.example.pnubookstore.domain.product.repository.UserJpaRepositoryForProduct;
+import org.example.pnubookstore.domain.product.repository.*;
 import org.example.pnubookstore.domain.user.entity.User;
 import org.hibernate.annotations.processing.Find;
 import org.springframework.stereotype.Service;
@@ -35,6 +33,7 @@ public class ProductService {
     private final UserJpaRepositoryForProduct userJpaRepositoryForProduct;
     private final SubjectJpaRepository subjectJpaRepository;
     private final ProductPictureJpaRepository productPictureJpaRepository;
+    private final LocationJpaRepository locationJpaRepository;
     private final S3Uploader s3Uploader;
 
     @Transactional
@@ -51,8 +50,11 @@ public class ProductService {
             findedSubject = saveSubject(createProductDto);
         }
 
+        Location createdLocation = saveLocation(createProductDto);
+
         // 물품 저장
-        Product createdProduct = saveProduct(createProductDto, findedSeller, findedSubject);
+        Product createdProduct = saveProduct(createProductDto, findedSeller, findedSubject, createdLocation);
+        createdLocation.setProduct(createdProduct);
 
         // 물품 사진 저장(추후 변경 예정)
 //        saveImages(createProductDto.getProductPictureList(), createdProduct);
@@ -133,11 +135,12 @@ public class ProductService {
                         .build());
     }
 
-    private Product saveProduct(CreateProductDto createProductDto, User seller, Subject subject){
+    private Product saveProduct(CreateProductDto createProductDto, User seller, Subject subject, Location location){
         return productJpaRepository.save(
                 Product.builder()
                         .seller(seller)
                         .subject(subject)
+                        .location(location)
                         .productName(createProductDto.getProductName())
                         .price(createProductDto.getPrice())
                         .description(createProductDto.getDescription())
@@ -163,5 +166,15 @@ public class ProductService {
                             .product(product)
                             .build());
         }
+    }
+
+    private Location saveLocation(CreateProductDto createProductDto){
+        return locationJpaRepository.save(
+                Location.builder()
+                        .buildingName(createProductDto.getBuildingName())
+                        .lockerNumber(createProductDto.getLockerNumber())
+                        .password(createProductDto.getPassword())
+                        .build()
+        );
     }
 }

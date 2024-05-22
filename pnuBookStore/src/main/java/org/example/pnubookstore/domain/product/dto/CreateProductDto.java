@@ -40,6 +40,11 @@ public class CreateProductDto {
     private String professor;
     private String department;
 
+    // 사물함 위치
+    private String buildingName;
+    private String lockerNumber;
+    private String password;
+
     // 아직 이미지는 넣지 않은 상태
     // 이미지는 리스트로
     private List<MultipartFile> productPictureList;
