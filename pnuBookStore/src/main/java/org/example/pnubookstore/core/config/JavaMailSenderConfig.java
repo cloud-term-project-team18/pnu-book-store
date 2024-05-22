@@ -26,10 +26,10 @@ public class JavaMailSenderConfig {
     @Bean
     public JavaMailSender javaMailService() {
         final JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        System.out.println(host);
-        System.out.println(port);
-        System.out.println(adminMail);
-        System.out.println(adminPassword);
+//        System.out.println(host);
+//        System.out.println(port);
+//        System.out.println(adminMail);
+//        System.out.println(adminPassword);
         javaMailSender.setHost(host);
         javaMailSender.setUsername(adminMail);
         javaMailSender.setPassword(adminPassword);
@@ -41,7 +41,7 @@ public class JavaMailSenderConfig {
         properties.put("mail.transport.protocol", "smtp");
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.debug", "true");
+        properties.put("mail.debug", "false");
 
 
         return javaMailSender;

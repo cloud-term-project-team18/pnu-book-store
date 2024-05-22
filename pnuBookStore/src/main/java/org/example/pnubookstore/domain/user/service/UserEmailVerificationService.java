@@ -2,6 +2,13 @@ package org.example.pnubookstore.domain.user.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import lombok.RequiredArgsConstructor;
+import org.example.pnubookstore.core.exception.Exception404;
+import org.example.pnubookstore.domain.user.entity.EmailVerification;
+import org.example.pnubookstore.domain.user.repository.UserEmailVerificationRedisRepository;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -9,24 +16,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
+@RequiredArgsConstructor
 public class UserEmailVerificationService {
 
-    private JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
+    private final UserEmailVerificationRedisRepository userEmailVerificationRedisRepository;
 
-    public UserEmailVerificationService(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
-    }
 
-    public void userEmailVerify( String encryptedUser){
+
+    public EmailVerification isUserEmailValid(String uuid){
         // 파라미터로 넘겨준 정보를 레디스에서 실제로 있는 유저인지 검색
-
-        // 존재하는 유저인 경우 DB에서 verified = true로 변경
+        return userEmailVerificationRedisRepository.findByUuid(uuid);
     }
 
-    public void sendVerifyEmail(String email){
+    public void sendVerifyEmail(String email, String uuid){
         String subject = "인증 메일";
         String content = "메일 테스트 내용";
-        content += "<a href=\"http://localhost:8080/signUp/after-email\">링크 클릭</a>";
+        content += "<a href=\"http://localhost:8080/signUp/after-email?uuid=" + uuid + "\">링크 클릭</a>";
         String from = "pnuauction@gmail.com";
         String to = email;
 
@@ -42,7 +48,11 @@ public class UserEmailVerificationService {
             mailHelper.setText(content, true);
             // true는 html을 사용하겠다는 의미입니다.
 
-            javaMailSender.send(mail);
+            // 비동기로 메일 보내기
+            CompletableFuture<Void> voidCompletableFuture = CompletableFuture.runAsync(() -> {
+                javaMailSender.send(mail);
+            });
+
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }

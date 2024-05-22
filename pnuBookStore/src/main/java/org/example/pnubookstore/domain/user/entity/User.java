@@ -38,8 +38,7 @@ public class User extends AuditingEntity {
 
 	@Column(nullable = false, length = 50, unique = true)
 	private String nickname;
-	@ColumnDefault("false")
-	private Boolean emailVerified = false;
+
 	@ColumnDefault("false")
 	private Boolean canSale = false;
 

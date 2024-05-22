@@ -34,24 +34,17 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void createUser(CreateUserDto userDto) {
 		// 이미 존재하는 이메일인지 확인
-		if (userJpaRepository.existsByEmail(userDto.email())){
+		if (userJpaRepository.existsByEmailOrNickname(userDto.email(), userDto.nickname())){
 			throw new Exception400(UserExceptionStatus.USERNAME_ALREADY_USED);
 		}
-		//
 
 		// 회원 생성
 		User user =  userJpaRepository.save(User.builder()
 			.email(userDto.email())
 			.password(passwordEncoder.encode(userDto.password()))
 			.role(Role.ROLE_USER)
+			.nickname(userDto.nickname())
 			.build());
-
-		// 회원 임시 uuid 생성
-		String uuid = UUID.randomUUID().toString();
-		// uuid와 id를 redis에 저장
-		userEmailVerificationRedisRepository.save(new EmailVerification(uuid, user.getId()));
-		//
-
 	}
 
 	public void emailVerify(String email){
@@ -60,16 +53,13 @@ public class UserServiceImpl implements UserService {
 			throw new IllegalArgumentException("유효 하지 않은 메일 형식 입니다");
 		}
 
-		userEmailVerificationService.sendVerifyEmail(email);
-	}
-
-	@Override
-	public void afterEmailForm() {
-
-	}
-
-	@Override
-	public void login() {
+		// 회원 임시 uuid 생성
+		String uuid = UUID.randomUUID().toString();
+		// uuid와 id를 redis에 저장
+		userEmailVerificationRedisRepository.save(new EmailVerification(uuid, email));
+		// 메일 보내기
+		userEmailVerificationService.sendVerifyEmail(email, uuid);
 
 	}
+
 }

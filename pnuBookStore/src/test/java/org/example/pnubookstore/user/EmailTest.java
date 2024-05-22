@@ -10,7 +10,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 public class EmailTest {
 
     private JavaMailSender javaMailSender = new JavaMailSenderConfig().javaMailService();
-    private UserEmailVerificationService userEmailVerificationService = new UserEmailVerificationService(javaMailSender);
+    private UserEmailVerificationService userEmailVerificationService;
     @Test
     public void emailSendTest(){
 //        userEmailVerificationService.sendVerifyEmail("testtestest@pusan.ac.kr");
