@@ -101,11 +101,15 @@ public class ProductService {
 
         Subject findedSubject = findSubject(updateProductDto);
 
+        Location findedLocation = findedProduct.getLocation();
+        findedLocation.updateLocation(updateProductDto);
+
+
         findedProduct.updateProduct(updateProductDto, findedSubject);
 
         // 이미지 변경
-        productPictureJpaRepository.deleteAllByProduct(findedProduct);
-        saveImages(updateProductDto.getProductPictureList(), findedProduct);
+//        productPictureJpaRepository.deleteAllByProduct(findedProduct);
+//        saveImages(updateProductDto.getProductPictureList(), findedProduct);
     }
 
     @Transactional

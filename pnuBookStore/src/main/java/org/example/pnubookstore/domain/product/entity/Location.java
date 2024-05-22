@@ -3,6 +3,7 @@ package org.example.pnubookstore.domain.product.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.pnubookstore.domain.base.AuditingEntity;
+import org.example.pnubookstore.domain.product.dto.CreateProductDto;
 
 import java.util.Objects;
 
@@ -33,5 +34,11 @@ public class Location extends AuditingEntity {
         this.buildingName = buildingName;
         this.lockerNumber = lockerNumber;
         this.password = password;
+    }
+
+    public void updateLocation(CreateProductDto updateProductDto){
+        this.buildingName = updateProductDto.getBuildingName();
+        this.lockerNumber = updateProductDto.getLockerNumber();
+        this.password = updateProductDto.getPassword();
     }
 }
