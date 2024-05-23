@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +40,7 @@ public class ProductService {
     private final ProductPictureJpaRepository productPictureJpaRepository;
     private final LocationJpaRepository locationJpaRepository;
     private final S3Uploader s3Uploader;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     // 물품 등록
@@ -183,7 +185,7 @@ public class ProductService {
                 Location.builder()
                         .buildingName(createProductDto.getBuildingName())
                         .lockerNumber(createProductDto.getLockerNumber())
-                        .password(createProductDto.getPassword())
+                        .password(passwordEncoder.encode(createProductDto.getPassword()))
                         .build()
         );
     }
