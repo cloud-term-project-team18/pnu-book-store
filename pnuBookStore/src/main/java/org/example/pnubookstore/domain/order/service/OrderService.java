@@ -49,11 +49,8 @@ public class OrderService {
     }
 
     @Transactional
-    void deleteOrder(Long orderId){
+    public void deleteOrder(Long orderId){
         orderJpaRepository.deleteById(orderId);
     }
-
-
-
 
 }

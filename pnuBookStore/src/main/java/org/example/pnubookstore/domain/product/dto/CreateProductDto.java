@@ -21,9 +21,9 @@ import java.util.List;
 public class CreateProductDto {
 
     private String sellerEmail;
+
     private String productName;
     private Integer price;
-    private String college;
     private String description;
     private String author;
     private LocalDateTime pubDate;
@@ -33,6 +33,8 @@ public class CreateProductDto {
     private Boolean discolor;
     private Boolean damage;
 
+    // 과목
+    private String college;
     private String subjectName;
     private String professor;
     private String department;
