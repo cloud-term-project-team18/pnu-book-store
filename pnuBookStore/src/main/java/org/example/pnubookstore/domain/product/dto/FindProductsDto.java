@@ -10,5 +10,4 @@ public class FindProductsDto {
     private String productPictureUrl;
     private String seller;
     private Integer price;
-    private boolean isBargain;
 }

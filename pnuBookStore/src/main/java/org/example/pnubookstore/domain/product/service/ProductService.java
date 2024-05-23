@@ -16,6 +16,10 @@ import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
 import org.example.pnubookstore.domain.product.repository.*;
 import org.example.pnubookstore.domain.user.entity.User;
 import org.hibernate.annotations.processing.Find;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,20 +80,24 @@ public class ProductService {
 
     // 물품 리스트 조회
     // 물품명, 가격, 저자, 물품 이미지
-    public List<FindProductsDto> findProductList(){
-        List<Product> productList = productJpaRepository.findAll();
+    public Page<FindProductsDto> findProductList(int page){
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Product> productList = productJpaRepository.findAll(pageable);
 
         List<FindProductsDto> findProductsDtoList = new ArrayList<>();
 
         for (Product product : productList){
-            String pictureUrl = productPictureJpaRepository.findFirstByProduct(product).getUrl();
+            ProductPicture productPicture = productPictureJpaRepository.findFirstByProduct(product)
+                    .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_PICTURES_NOT_FOUND.getErrorMessage()));
+
+            String pictureUrl = productPicture.getUrl();
 
             findProductsDtoList.add(
-                    new FindProductsDto(product.getProductName(), pictureUrl, product.getSeller().getNickname(), product.getPrice(), product.getIsBargain())
+                    new FindProductsDto(product.getProductName(), pictureUrl, product.getSeller().getNickname(), product.getPrice())
             );
         }
 
-        return findProductsDtoList;
+        return new PageImpl<>(findProductsDtoList, pageable, productList.getTotalElements());
     }
 
     @Transactional

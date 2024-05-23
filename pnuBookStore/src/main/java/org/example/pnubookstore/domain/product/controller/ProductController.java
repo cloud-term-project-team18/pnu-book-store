@@ -1,12 +1,16 @@
 package org.example.pnubookstore.domain.product.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.pnubookstore.domain.product.dto.CreateProductDto;
 import org.example.pnubookstore.domain.product.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -15,8 +19,8 @@ public class ProductController {
 
     // 물품 리스트
     @GetMapping(value = "/products")
-    public String products(Model model){
-        model.addAttribute("products", productService.findProductList());
+    public String products(Model model, @RequestParam(value="page", defaultValue="0") int page){
+        model.addAttribute("products", productService.findProductList(page));
 
         return "board/auction-board.html";
     }
@@ -33,6 +37,11 @@ public class ProductController {
     @GetMapping(value = "/product")
     public String productPage(){
         // 물품 등록 페이지
-        return "board/product";
+        return "board/product-register.html";
     }
+
+//    @PostMapping(value = "/product")
+//    public void registerProudct(CreateProductDto createProductDto) throws IOException {
+//        productService.createProduct(createProductDto);
+//    }
 }
