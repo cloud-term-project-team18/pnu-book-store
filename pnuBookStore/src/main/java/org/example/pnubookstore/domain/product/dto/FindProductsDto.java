@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString
 public class FindProductsDto {
     private String productName;
-    private String productPictureUrl;
+//    private String productPictureUrl;
     private String seller;
     private Integer price;
 }

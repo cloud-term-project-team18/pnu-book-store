@@ -87,13 +87,13 @@ public class ProductService {
         List<FindProductsDto> findProductsDtoList = new ArrayList<>();
 
         for (Product product : productList){
-            ProductPicture productPicture = productPictureJpaRepository.findFirstByProduct(product)
-                    .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_PICTURES_NOT_FOUND.getErrorMessage()));
-
-            String pictureUrl = productPicture.getUrl();
+//            ProductPicture productPicture = productPictureJpaRepository.findFirstByProduct(product)
+//                    .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_PICTURES_NOT_FOUND.getErrorMessage()));
+//
+//            String pictureUrl = productPicture.getUrl();
 
             findProductsDtoList.add(
-                    new FindProductsDto(product.getProductName(), pictureUrl, product.getSeller().getNickname(), product.getPrice())
+                    new FindProductsDto(product.getProductName(), product.getSeller().getNickname(), product.getPrice())
             );
         }
 
@@ -158,8 +158,6 @@ public class ProductService {
                         .description(createProductDto.getDescription())
                         .author(createProductDto.getAuthor())
                         .pubDate(createProductDto.getPubDate())
-                        .isBargain(createProductDto.getIsBargain())
-                        .canBargainReason(createProductDto.getCanBargainReason())
                         .saleStatus(SaleStatus.NOT_YET)
                         .underline(createProductDto.getUnderline())
                         .note(createProductDto.getNote())

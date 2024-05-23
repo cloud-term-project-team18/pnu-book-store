@@ -47,10 +47,6 @@ public class Product extends AuditingEntity {
 	@Column(nullable = false)
 	private LocalDateTime pubDate;
 	@Column(nullable = false)
-	private Boolean isBargain;
-	@Column(length = 1000)
-	private String canBargainReason;
-	@Column(nullable = false)
 	@Enumerated(value = EnumType.STRING)
 	private SaleStatus saleStatus;
 	@Column(nullable = false)
@@ -68,7 +64,7 @@ public class Product extends AuditingEntity {
 
 	@Builder
 	public Product(Long id, User seller, Subject subject, Location location, String productName, Integer price, String description, String author,
-		LocalDateTime pubDate, Boolean isBargain, String canBargainReason, SaleStatus saleStatus, UseStatus underline,
+		LocalDateTime pubDate, SaleStatus saleStatus, UseStatus underline,
 		UseStatus note, Boolean naming, Boolean discolor, Boolean damage) {
 		this.id = id;
 		this.seller = seller;
@@ -79,8 +75,6 @@ public class Product extends AuditingEntity {
 		this.description = description;
 		this.author = author;
 		this.pubDate = pubDate;
-		this.isBargain = isBargain;
-		this.canBargainReason = canBargainReason;
 		this.saleStatus = saleStatus;
 		this.underline = underline;
 		this.note = note;
@@ -112,8 +106,6 @@ public class Product extends AuditingEntity {
 		this.description = productDto.getDescription();
 		this.author = productDto.getAuthor();
 		this.pubDate = productDto.getPubDate();
-		this.isBargain = productDto.getIsBargain();
-		this.canBargainReason = productDto.getCanBargainReason();
 		this.underline = productDto.getUnderline();
 		this.note = productDto.getNote();
 		this.naming = productDto.getDiscolor();
