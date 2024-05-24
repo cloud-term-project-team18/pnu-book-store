@@ -61,17 +61,17 @@
                 professor: professor,
                 course: course
             },
-            success: function(data) {
+            success: function (data) {
                 data.forEach(product => {
                     $('#product-list').append('<div class="col"><div class="card"><div class="card-body"><h5 class="card-title">' + product.name + '</h5><p class="card-text">가격: ₩' + product.price + '</p></div></div></div>');
                 });
                 page++;
             },
-            error: function() {
+            error: function () {
                 console.error('제품을 로드하는 중 오류가 발생했습니다.');
             }
         });
-
+    }
 
     function loadSelectBoxData(endpoint, selectBoxId) {
         $.ajax({
@@ -129,6 +129,7 @@
             }
         });
 
+
         loadMoreProducts(); // 페이지 로드 시 첫 페이지 로드
 
         $(window).scroll(function() {
@@ -142,7 +143,7 @@
             $('#product-list').empty(); // 기존 검색 결과 지우기
             loadMoreProducts(); // 새로운 검색 결과 로드
         });
-    });}
+    });
 </script>
 </body>
 </html>

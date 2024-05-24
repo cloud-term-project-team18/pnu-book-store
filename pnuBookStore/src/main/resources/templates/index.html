@@ -16,7 +16,7 @@
 <div class="container mt-5">
     <div class="hero-unit text-center">
         <h1 class="mx-auto" style="max-width: 100%;">부산대학교 전공서적 중고거래사이트</h1>
-        <div class="mt-4">
+        <div class="mt-4" th:if="${#authorization.expression('!isAuthenticated()')}">
             <a href="/signUp" th:href="@{/signUp}" class="btn btn-success btn-lg mx-2">Sign up</a>
             <a href="/login" th:href="@{/login}" class="btn btn-primary btn-lg mx-2">Login</a>
         </div>
