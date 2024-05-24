@@ -9,11 +9,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString
 public class FindProductDto {
+    private Long id;
     private String sellerName;
     private String subjectName;
     private String professor;
@@ -24,8 +26,6 @@ public class FindProductDto {
     private String description;
     private String author;
     private LocalDateTime pubDate;
-    private Boolean isBargain;
-    private String canBargainReason;
     private SaleStatus saleStatus;
     private UseStatus underline;
     private UseStatus note;
@@ -36,6 +36,7 @@ public class FindProductDto {
 
     public static FindProductDto of(Product product, List<String> urlList){
         return FindProductDto.builder()
+                .id(product.getId())
                 .sellerName(product.getSeller().getNickname())
                 .subjectName(product.getSubject().getSubjectName())
                 .professor(product.getSubject().getProfessor())
@@ -46,9 +47,6 @@ public class FindProductDto {
                 .description(product.getDescription())
                 .author(product.getAuthor())
                 .pubDate(product.getPubDate())
-                .isBargain(product.getIsBargain())
-                .canBargainReason(product.getCanBargainReason())
-                .saleStatus(product.getSaleStatus())
                 .underline(product.getUnderline())
                 .note(product.getNote())
                 .naming(product.getNaming())

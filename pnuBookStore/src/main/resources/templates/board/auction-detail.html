@@ -15,7 +15,7 @@
                 <img th:each="url : ${product.productPictureUrlList}" th:src="${url}" class="img-fluid mb-2" alt="Product Image">
             </div>
             <p class="card-text" th:text="${product.description}">물품 설명</p>
-            <p class="card-text" th:text="${product.subject}">과목</p>
+            <p class="card-text" th:text="${product.subjectName}">과목</p>
             <p class="card-text" th:text="${product.author}">저자</p>
             <p class="card-text" th:text="'가격: ₩' + ${product.price}">가격: ₩0</p>
             <p class="card-text"><small class="text-muted" th:text="'이름 기입 : ' + (${product.naming} ? '예' : '아니오')">이름 기입 : 예</small></p>
@@ -23,7 +23,15 @@
             <p class="card-text"><small class="text-muted" th:text="'필기 여부 : ' + (${product.note} == 'NO' ? '없음' : (${product.underline} == 'PENCIL' ? '연필' : '펜'))">필기 : 없음</small></p>
             <p class="card-text"><small class="text-muted" th:text="'페이지 변색 : ' + (${product.discolor} ? '예' : '아니오')">페이지 변색 : 예</small></p>
             <p class="card-text"><small class="text-muted" th:text="'페이지 훼손 : ' + (${product.damage} ? '예' : '아니오')">페이지 훼손 : 예</small></p>
-            <div th:if="${!product.saleStatus} == 'READY'">
+<!--            <div th:if="${product.isBargain}">-->
+<!--                <form th:action="@{/bargain/{id}(id=${product.id})}" method="post">-->
+<!--                    <div class="input-group mb-3">-->
+<!--                        <input type="number" class="form-control" name="bargainPrice" placeholder="흥정 가격 입력">-->
+<!--                        <button class="btn btn-outline-secondary" type="submit">흥정 제안</button>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+            <div th:if="${product.saleStatus} == ${T(org.example.pnubookstore.domain.product.entity.constant.SaleStatus).NOT_YET}">
                 <form th:action="@{/purchase/{id}(id=${product.id})}" method="post">
                     <input type="hidden" name="productId" th:value="${product.id}">
                     <button class="btn btn-success" type="submit">구매하기</button>

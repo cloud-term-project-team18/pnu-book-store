@@ -3,6 +3,7 @@ package org.example.pnubookstore.domain.product.entity;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import jakarta.persistence.*;
 import org.example.pnubookstore.domain.base.AuditingEntity;
 import org.example.pnubookstore.domain.product.dto.CreateProductDto;
 import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
@@ -10,16 +11,6 @@ import org.example.pnubookstore.domain.product.entity.constant.UseStatus;
 import org.example.pnubookstore.domain.user.entity.User;
 import org.hibernate.annotations.ColumnDefault;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,6 +32,10 @@ public class Product extends AuditingEntity {
 	@JoinColumn(name="subject", nullable=false, referencedColumnName = "id")
 	private Subject subject;
 
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "location", nullable = false, referencedColumnName = "id")
+	private Location location;
+
 	@Column(nullable = false)
 	private String productName;
 	@Column(nullable = false)
@@ -51,10 +46,6 @@ public class Product extends AuditingEntity {
 	private String author;
 	@Column(nullable = false)
 	private LocalDateTime pubDate;
-	@Column(nullable = false)
-	private Boolean isBargain;
-	@Column(length = 1000)
-	private String canBargainReason;
 	@Column(nullable = false)
 	@Enumerated(value = EnumType.STRING)
 	private SaleStatus saleStatus;
@@ -72,19 +63,18 @@ public class Product extends AuditingEntity {
 	private Boolean damage;
 
 	@Builder
-	public Product(Long id, User seller, Subject subject, String productName, Integer price, String description, String author,
-		LocalDateTime pubDate, Boolean isBargain, String canBargainReason, SaleStatus saleStatus, UseStatus underline,
+	public Product(Long id, User seller, Subject subject, Location location, String productName, Integer price, String description, String author,
+		LocalDateTime pubDate, SaleStatus saleStatus, UseStatus underline,
 		UseStatus note, Boolean naming, Boolean discolor, Boolean damage) {
 		this.id = id;
 		this.seller = seller;
 		this.subject = subject;
+		this.location = location;
 		this.productName = productName;
 		this.price = price;
 		this.description = description;
 		this.author = author;
 		this.pubDate = pubDate;
-		this.isBargain = isBargain;
-		this.canBargainReason = canBargainReason;
 		this.saleStatus = saleStatus;
 		this.underline = underline;
 		this.note = note;
@@ -116,13 +106,14 @@ public class Product extends AuditingEntity {
 		this.description = productDto.getDescription();
 		this.author = productDto.getAuthor();
 		this.pubDate = productDto.getPubDate();
-		this.isBargain = productDto.getIsBargain();
-		this.canBargainReason = productDto.getCanBargainReason();
-		this.saleStatus = productDto.getSaleStatus();
 		this.underline = productDto.getUnderline();
 		this.note = productDto.getNote();
 		this.naming = productDto.getDiscolor();
 		this.discolor = productDto.getDiscolor();
 		this.damage = productDto.getDamage();
+	}
+
+	public void changeSaleStatus(SaleStatus saleStatus) {
+		this.saleStatus = saleStatus;
 	}
 }

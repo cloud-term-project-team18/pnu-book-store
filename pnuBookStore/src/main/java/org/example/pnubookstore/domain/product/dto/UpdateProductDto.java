@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
 import org.example.pnubookstore.domain.product.entity.constant.UseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -17,8 +19,6 @@ public class UpdateProductDto {
     private String description;
     private String author;
     private LocalDateTime pubDate;
-    private Boolean isBargain;
-    private String canBargainReason;
     private SaleStatus saleStatus;
     private UseStatus underline;
     private UseStatus note;
@@ -31,4 +31,5 @@ public class UpdateProductDto {
     private String department;
 
     // 이미지 추후 추가 예정
+    private List<MultipartFile> productPictureList;
 }

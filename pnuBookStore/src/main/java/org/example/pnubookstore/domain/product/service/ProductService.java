@@ -2,23 +2,30 @@ package org.example.pnubookstore.domain.product.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.pnubookstore.core.exception.Exception404;
+import org.example.pnubookstore.core.s3.S3Uploader;
 import org.example.pnubookstore.domain.product.dto.CreateProductDto;
 import org.example.pnubookstore.domain.product.ProductExceptionStatus;
 import org.example.pnubookstore.domain.product.dto.FindProductDto;
 import org.example.pnubookstore.domain.product.dto.FindProductsDto;
 import org.example.pnubookstore.domain.product.dto.UpdateProductDto;
+import org.example.pnubookstore.domain.product.entity.Location;
 import org.example.pnubookstore.domain.product.entity.Product;
 import org.example.pnubookstore.domain.product.entity.ProductPicture;
 import org.example.pnubookstore.domain.product.entity.Subject;
-import org.example.pnubookstore.domain.product.repository.ProductJpaRepository;
-import org.example.pnubookstore.domain.product.repository.ProductPictureJpaRepository;
-import org.example.pnubookstore.domain.product.repository.SubjectJpaRepository;
-import org.example.pnubookstore.domain.product.repository.UserJpaRepositoryForProduct;
+import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
+import org.example.pnubookstore.domain.product.repository.*;
 import org.example.pnubookstore.domain.user.entity.User;
 import org.hibernate.annotations.processing.Find;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,12 +38,13 @@ public class ProductService {
     private final UserJpaRepositoryForProduct userJpaRepositoryForProduct;
     private final SubjectJpaRepository subjectJpaRepository;
     private final ProductPictureJpaRepository productPictureJpaRepository;
+    private final LocationJpaRepository locationJpaRepository;
+    private final S3Uploader s3Uploader;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     // 물품 등록
-    public void createProduct(CreateProductDto createProductDto){
-        final String tempUrl = "http://example.com";
-
+    public void createProduct(CreateProductDto createProductDto) throws IOException {
         // 유저 존재 여부 체크(추후 변경될 수 있음)
         User findedSeller = findUser(createProductDto);
 
@@ -48,15 +56,14 @@ public class ProductService {
             findedSubject = saveSubject(createProductDto);
         }
 
+        Location createdLocation = saveLocation(createProductDto);
+
         // 물품 저장
-        Product createdProduct = saveProduct(createProductDto, findedSeller, findedSubject);
+        Product createdProduct = saveProduct(createProductDto, findedSeller, findedSubject, createdLocation);
+        createdLocation.setProduct(createdProduct);
 
         // 물품 사진 저장(추후 변경 예정)
-        productPictureJpaRepository.save(
-                ProductPicture.builder()
-                        .url(tempUrl)
-                        .product(createdProduct)
-                        .build());
+//        saveImages(createProductDto.getProductPictureList(), createdProduct);
     }
 
     // 물품 조회
@@ -75,24 +82,28 @@ public class ProductService {
 
     // 물품 리스트 조회
     // 물품명, 가격, 저자, 물품 이미지
-    public List<FindProductsDto> findProductList(){
-        List<Product> productList = productJpaRepository.findAll();
+    public Page<FindProductsDto> findProductList(int page){
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Product> productList = productJpaRepository.findAll(pageable);
 
         List<FindProductsDto> findProductsDtoList = new ArrayList<>();
 
         for (Product product : productList){
-            String pictureUrl = productPictureJpaRepository.findFirstByProduct(product).getUrl();
+//            ProductPicture productPicture = productPictureJpaRepository.findFirstByProduct(product)
+//                    .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_PICTURES_NOT_FOUND.getErrorMessage()));
+//
+//            String pictureUrl = productPicture.getUrl();
 
             findProductsDtoList.add(
-                    new FindProductsDto(product.getProductName(), product.getAuthor(), product.getPrice(), pictureUrl)
+                    new FindProductsDto(product.getProductName(), product.getSeller().getNickname(), product.getPrice())
             );
         }
 
-        return findProductsDtoList;
+        return new PageImpl<>(findProductsDtoList, pageable, productList.getTotalElements());
     }
 
     @Transactional
-    public void updateProduct(Long productId, CreateProductDto updateProductDto){
+    public void updateProduct(Long productId, CreateProductDto updateProductDto) throws IOException {
         findUser(updateProductDto);
 
         Product findedProduct = productJpaRepository.findById(productId)
@@ -100,9 +111,23 @@ public class ProductService {
 
         Subject findedSubject = findSubject(updateProductDto);
 
+        Location findedLocation = findedProduct.getLocation();
+        findedLocation.updateLocation(updateProductDto);
+
+
         findedProduct.updateProduct(updateProductDto, findedSubject);
 
         // 이미지 변경
+//        productPictureJpaRepository.deleteAllByProduct(findedProduct);
+//        saveImages(updateProductDto.getProductPictureList(), findedProduct);
+    }
+
+    @Transactional
+    public void deleteProduct(Long productId){
+        Product findedProduct = productJpaRepository.findById(productId)
+                        .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
+        productPictureJpaRepository.deleteAllByProduct(findedProduct);
+        productJpaRepository.delete(findedProduct);
     }
 
     private User findUser(CreateProductDto createProductDto){
@@ -112,10 +137,7 @@ public class ProductService {
 
     private Subject findSubject(CreateProductDto createProductDto){
         return subjectJpaRepository.findBySubjectNameAndCollegeAndDepartmentAndProfessor(
-                createProductDto.getSubjectName(),
-                createProductDto.getCollege(),
-                createProductDto.getDepartment(),
-                createProductDto.getProfessor());
+                createProductDto.getSubjectName(), createProductDto.getCollege(), createProductDto.getDepartment(), createProductDto.getProfessor());
     }
 
     private Subject saveSubject(CreateProductDto createProductDto){
@@ -123,29 +145,48 @@ public class ProductService {
                 Subject.builder()
                         .subjectName(createProductDto.getSubjectName())
                         .professor(createProductDto.getProfessor())
-                        .college(createProductDto.getCollege())
                         .department(createProductDto.getDepartment())
                         .build());
     }
 
-    private Product saveProduct(CreateProductDto createProductDto, User seller, Subject subject){
+    private Product saveProduct(CreateProductDto createProductDto, User seller, Subject subject, Location location){
         return productJpaRepository.save(
                 Product.builder()
                         .seller(seller)
                         .subject(subject)
+                        .location(location)
                         .productName(createProductDto.getProductName())
                         .price(createProductDto.getPrice())
                         .description(createProductDto.getDescription())
                         .author(createProductDto.getAuthor())
                         .pubDate(createProductDto.getPubDate())
-                        .isBargain(createProductDto.getIsBargain())
-                        .canBargainReason(createProductDto.getCanBargainReason())
-                        .saleStatus(createProductDto.getSaleStatus())
+                        .saleStatus(SaleStatus.NOT_YET)
                         .underline(createProductDto.getUnderline())
                         .note(createProductDto.getNote())
                         .naming(createProductDto.getNaming())
                         .discolor(createProductDto.getDiscolor())
                         .damage(createProductDto.getDamage())
                         .build());
+    }
+
+    private void saveImages(List<MultipartFile> imageFiles, Product product) throws IOException {
+        for(MultipartFile imageFile : imageFiles){
+            String imageUrl = s3Uploader.uploadFile(imageFile);
+            productPictureJpaRepository.save(
+                    ProductPicture.builder()
+                            .url(imageUrl)
+                            .product(product)
+                            .build());
+        }
+    }
+
+    private Location saveLocation(CreateProductDto createProductDto){
+        return locationJpaRepository.save(
+                Location.builder()
+                        .buildingName(createProductDto.getBuildingName())
+                        .lockerNumber(createProductDto.getLockerNumber())
+                        .password(passwordEncoder.encode(createProductDto.getPassword()))
+                        .build()
+        );
     }
 }
