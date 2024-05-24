@@ -222,6 +222,7 @@
             $.ajax({
                 url: endpoint,
                 type: 'GET',
+                dataType: 'json',
                 success: function(data) {
                     const selectBox = $(selectBoxId);
                     selectBox.empty();
