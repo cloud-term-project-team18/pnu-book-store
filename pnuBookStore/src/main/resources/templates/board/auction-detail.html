@@ -11,7 +11,9 @@
     <div class="card mb-3">
         <div class="card-body">
             <h3 class="card-title" th:text="${product.productName}">물품 이름</h3>
-<!--            <img th:src="@{/img/productImages/{id}(id=${product.id})}" class="card-img-top" alt="Product Image">-->
+            <div id="product-images" class="mb-3">
+                <img th:each="url : ${product.productPictureUrlList}" th:src="${url}" class="img-fluid mb-2" alt="Product Image">
+            </div>
             <p class="card-text" th:text="${product.description}">물품 설명</p>
             <p class="card-text" th:text="${product.subjectName}">과목</p>
             <p class="card-text" th:text="${product.author}">저자</p>
