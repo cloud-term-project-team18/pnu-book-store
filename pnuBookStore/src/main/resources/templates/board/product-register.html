@@ -8,7 +8,7 @@
 <body>
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <div class="card shadow-lg p-3 mb-5 bg-body rounded">
                 <div class="card-body">
                     <h1 class="card-title text-center mb-4">판매 물품 등록</h1>
@@ -18,10 +18,35 @@
                             <input type="text" class="form-control" id="title" name="title" required>
                             <div class="invalid-feedback">물품 이름을 입력해주세요.</div>
                         </div>
-                        <div class="mb-3">
-                            <label for="subject" class="form-label">과목:</label>
-                            <input type="text" class="form-control" id="subject" name="subject" required>
-                            <div class="invalid-feedback">과목을 입력해주세요.</div>
+                        <div class="mb-3 row">
+                            <div class="col-md-3">
+                                <label for="college" class="form-label">대학:</label>
+                                <select class="form-select" id="college" name="college" required>
+                                    <option value="">대학</option>
+                                </select>
+                                <div class="invalid-feedback">대학을 선택해주세요.</div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="department" class="form-label">학과:</label>
+                                <select class="form-select" id="department" name="department" required>
+                                    <option value="">학과</option>
+                                </select>
+                                <div class="invalid-feedback">학과를 선택해주세요.</div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="professor" class="form-label">교수:</label>
+                                <select class="form-select" id="professor" name="professor" required>
+                                    <option value="">교수명</option>
+                                </select>
+                                <div class="invalid-feedback">교수명을 선택해주세요.</div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="subject" class="form-label">과목:</label>
+                                <select class="form-select" id="subject" name="subject" required>
+                                    <option value="">과목</option>
+                                </select>
+                                <div class="invalid-feedback">과목을 선택해주세요.</div>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="author" class="form-label">저자:</label>
@@ -34,9 +59,9 @@
                             <div class="invalid-feedback">가격을 입력해주세요.</div>
                         </div>
                         <div class="mb-3">
-                            <label for="description" class="form-label">설명:</label>
-                            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-                            <div class="invalid-feedback">설명을 입력해주세요.</div>
+                            <label for="author" class="form-label">저자:</label>
+                            <input type="text" class="form-control" id="author" name="author" required>
+                            <div class="invalid-feedback">저자을 입력해주세요.</div>
                         </div>
                         <div class="mb-3">
                             <label for="image" class="form-label">이미지 업로드:</label>
@@ -106,6 +131,21 @@
                                 <label class="form-check-label" for="writingPen">볼펜</label>
                             </div>
                         </div>
+                        <div class="mb-3">
+                            <label for="buildingName" class="form-label">건물 이름:</label>
+                            <input type="text" class="form-control" id="buildingName" name="buildingName" required>
+                            <div class="invalid-feedback">건물 이름을 입력해 주세요.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lockerNumber" class="form-label">사물함 번호:</label>
+                            <input type="number" class="form-control" id="lockerNumber" name="lockerNumber" required>
+                            <div class="invalid-feedback">사물함 번호를 입력해주세요.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">자물쇠 비밀번호:</label>
+                            <input type="number" class="form-control" id="password" name="password" required>
+                            <div class="invalid-feedback">자물쇠 비밀번호를 입력해주세요.</div>
+                        </div>
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg">물품 등록</button>
                         </div>
@@ -140,6 +180,62 @@
             form.classList.add('was-validated');
         }, false);
     })();
+
+    // Load subjects dynamically based on college, department, and professor selection
+    $(document).ready(function() {
+        loadSelectBoxData('/api/colleges', '#college');
+
+        $('#college').change(function() {
+            const college = $(this).val();
+            if (college) {
+                loadSelectBoxData('/api/departments?college=' + college, '#department');
+            } else {
+                $('#department').empty().append('<option value="">학과</option>');
+                $('#professor').empty().append('<option value="">교수명</option>');
+                $('#subject').empty().append('<option value="">과목</option>');
+            }
+        });
+
+        $('#department').change(function() {
+            const college = $('#college').val();
+            const department = $(this).val();
+            if (college && department) {
+                loadSelectBoxData('/api/professors?college=' + college + '&department=' + department, '#professor');
+            } else {
+                $('#professor').empty().append('<option value="">교수명</option>');
+                $('#subject').empty().append('<option value="">과목</option>');
+            }
+        });
+
+        $('#professor').change(function() {
+            const college = $('#college').val();
+            const department = $('#department').val();
+            const professor = $(this).val();
+            if (college && department && professor) {
+                loadSelectBoxData('/api/subjects?college=' + college + '&department=' + department + '&professor=' + professor, '#subject');
+            } else {
+                $('#subject').empty().append('<option value="">과목</option>');
+            }
+        });
+
+        function loadSelectBoxData(endpoint, selectBoxId) {
+            $.ajax({
+                url: endpoint,
+                type: 'GET',
+                success: function(data) {
+                    const selectBox = $(selectBoxId);
+                    selectBox.empty();
+                    selectBox.append('<option value="">선택</option>');
+                    data.forEach(item => {
+                        selectBox.append('<option value="' + item + '">' + item + '</option>');
+                    });
+                },
+                error: function() {
+                    console.error('데이터를 로드하는 중 오류가 발생했습니다.');
+                }
+            });
+        }
+    });
 </script>
 </body>
 </html>
