@@ -16,9 +16,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/cloudteam18?use_ssl=false
-    username: root
-    password: qwer1234
+    url: ${DATABASE_URI}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
 
   jpa:
     hibernate:
@@ -34,14 +34,15 @@ spring:
 
   data:
     redis:
-      host: redis
+      host: ${REDIS_URI}
       port: 6379
+      password: ${REDIS_PASSWORD}
 
   mail:
     host: smtp.gmail.com
     port: 587
-    username: pnuauction@gmail.com
-    password: dwdkwjuyorcdvlxm
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail.smtp.starttls.enable: true
       mail:
