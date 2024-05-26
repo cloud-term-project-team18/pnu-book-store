@@ -10,7 +10,7 @@ env:
 
 defaults:
     run:
-        working-directory: ./pnuBookStore
+        working-directory: pnuBookStore
 jobs:
     deploy:
         runs-on: ubuntu-latest
@@ -19,7 +19,7 @@ jobs:
             - name: Login to NCP Registry
               id: login_registry
               run: |
-                docker login docker-pnu-bookstore-spring.kr.ncr.ntruss.com --username ${{ secrets.ACCESS_TOKEN }} --password-stdin ${{ secrets.SECRET_TOKEN }}
+                docker login ${{ secrets.REGISTRY }} --username ${{ secrets.ACCESS_TOKEN }} --password-stdin ${{ secrets.SECRET_TOKEN }}
         
             - name: Docker Build
               run: |
