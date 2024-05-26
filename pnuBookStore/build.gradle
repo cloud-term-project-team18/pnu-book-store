@@ -47,3 +47,13 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+bootJar {
+    archiveBaseName = 'cloud'
+    archiveFileName = 'cloud.jar'
+    archiveVersion = "0.0.1"
+}
+
+jar {
+    enabled = false
+}
