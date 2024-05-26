@@ -15,11 +15,4 @@ WORKDIR /opt/cloud
 
 COPY --from=build /home/gradle/project/build/libs/cloud.jar .
 
-ENV DATABASE_URI=${DATABASE_URI:-}
-ENV DATABASE_USERNAME=${DATABASE_USERNAME:-}
-ENV DATABASE_PASSWORD=${DATABASE_PASSWORD:-}
-ENV MAIL_USERNAME=${MAIL_USERNAME:-}
-ENV MAIL_PASSWORD=${MAIL_PASSWORD:-}
-ENV REDIS_URI=${REDIS_URI:-}
-ENV REDIS_PASSWORD=${REDIS_PASSWORD:-}
 CMD ["java", "-Dspring.profiles.active=prod", "-jar", "cloud.jar"]
