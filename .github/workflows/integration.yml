@@ -22,7 +22,7 @@ jobs:
             - name: Login to NCP Registry
               id: login_registry
               run: |
-                docker login ${{ secrets.REGISTRY }} --username ${{ secrets.ACCESS_TOKEN }} --password-stdin ${{ secrets.SECRET_TOKEN }}
+                docker login ${{ secrets.REGISTRY }} --username ${{ secrets.ACCESS_TOKEN }} --password ${{ secrets.SECRET_TOKEN }}
         
             - name: Docker Build
               run: |
