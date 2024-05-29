@@ -3,11 +3,10 @@ package org.example.pnubookstore.domain.product.service;
 import lombok.RequiredArgsConstructor;
 import org.example.pnubookstore.core.exception.Exception404;
 import org.example.pnubookstore.core.s3.S3Uploader;
-import org.example.pnubookstore.domain.product.dto.CreateProductDto;
+import org.example.pnubookstore.domain.order.entity.Order;
+import org.example.pnubookstore.domain.order.repository.OrderJpaRepository;
+import org.example.pnubookstore.domain.product.dto.*;
 import org.example.pnubookstore.domain.product.ProductExceptionStatus;
-import org.example.pnubookstore.domain.product.dto.FindProductDto;
-import org.example.pnubookstore.domain.product.dto.FindProductsDto;
-import org.example.pnubookstore.domain.product.dto.UpdateProductDto;
 import org.example.pnubookstore.domain.product.entity.Location;
 import org.example.pnubookstore.domain.product.entity.Product;
 import org.example.pnubookstore.domain.product.entity.ProductPicture;
@@ -43,6 +42,7 @@ public class ProductService {
     private final S3Uploader s3Uploader;
     private final PasswordEncoder passwordEncoder;
     private final SubjectCustomRepositoryImpl subjectCustomRepository;
+    private final OrderJpaRepository orderJpaRepository;
 
     @Transactional
     // 물품 등록
@@ -145,6 +145,27 @@ public class ProductService {
                         .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
         productPictureJpaRepository.deleteAllByProduct(findedProduct);
         productJpaRepository.delete(findedProduct);
+    }
+
+    public List<BuyProductDto> findBuyProducts(int page){
+        Pageable pageable = PageRequest.of(page, 10);
+
+        User findBuyer = userJpaRepositoryForProduct.findById(1L).orElseThrow();
+        Page<Order> orders = orderJpaRepository.findOrderByBuyer(findBuyer, pageable);
+
+        List<BuyProductDto> buyProductDtos = new ArrayList<>();
+        for(Order order : orders){
+            buyProductDtos.add(
+                    BuyProductDto.builder()
+                            .productId(order.getProduct().getId())
+                            .price(order.getMoney())
+                            .productName(order.getProduct().getProductName())
+                            .seller(order.getSeller().getNickname())
+                            .build()
+            );
+        }
+
+        return buyProductDtos;
     }
 
 //    private User findUser(CreateProductDto createProductDto){

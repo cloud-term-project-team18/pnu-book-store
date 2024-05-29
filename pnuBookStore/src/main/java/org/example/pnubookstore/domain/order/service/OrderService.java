@@ -62,42 +62,42 @@ public class OrderService {
         orderJpaRepository.deleteById(orderId);
     }
 
-    public Page<SaleOrderDto> findSaleOrders(String nickName, int page){
-        User seller = userJpaRepositoryForOrder.findByNickname(nickName)
-                .orElseThrow(() -> new Exception404(OrderExceptionStatus.USER_NOT_FOUND.getErrorMessage()));
-
-        Pageable pageable = PageRequest.of(page, 10);
-
-        Page<Order> findOrderList = orderJpaRepository.findOrderBySeller(seller, pageable);
-
-        List<SaleOrderDto> saleOrderDtoList = findOrderList.stream()
-                .map(order -> new SaleOrderDto(
-                        order.getProduct().getProductName(),
-                        order.getBuyer().getNickname(),
-                        order.getMoney()
-                ))
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(saleOrderDtoList, pageable, findOrderList.getTotalElements());
-    }
-
-    public Page<BuyOrderDto> findBuyOrders(String nickName, int page){
-        User buyer = userJpaRepositoryForOrder.findByNickname(nickName)
-                .orElseThrow(() -> new Exception404(OrderExceptionStatus.USER_NOT_FOUND.getErrorMessage()));
-
-        Pageable pageable = PageRequest.of(page, 10);
-
-        Page<Order> findOrderList = orderJpaRepository.findOrderByBuyer(buyer, pageable);
-
-        List<BuyOrderDto> buyOrderDtoList = findOrderList.stream()
-                .map(order -> new BuyOrderDto(
-                        order.getProduct().getProductName(),
-                        order.getSeller().getNickname(),
-                        order.getMoney()
-                ))
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(buyOrderDtoList, pageable, findOrderList.getTotalElements());
-    }
+//    public Page<SaleOrderDto> findSaleOrders(String nickName, int page){
+//        User seller = userJpaRepositoryForOrder.findByNickname(nickName)
+//                .orElseThrow(() -> new Exception404(OrderExceptionStatus.USER_NOT_FOUND.getErrorMessage()));
+//
+//        Pageable pageable = PageRequest.of(page, 10);
+//
+//        Page<Order> findOrderList = orderJpaRepository.findOrderBySeller(seller, pageable);
+//
+//        List<SaleOrderDto> saleOrderDtoList = findOrderList.stream()
+//                .map(order -> new SaleOrderDto(
+//                        order.getProduct().getProductName(),
+//                        order.getBuyer().getNickname(),
+//                        order.getMoney()
+//                ))
+//                .collect(Collectors.toList());
+//
+//        return new PageImpl<>(saleOrderDtoList, pageable, findOrderList.getTotalElements());
+//    }
+//
+//    public Page<BuyOrderDto> findBuyOrders(String nickName, int page){
+//        User buyer = userJpaRepositoryForOrder.findByNickname(nickName)
+//                .orElseThrow(() -> new Exception404(OrderExceptionStatus.USER_NOT_FOUND.getErrorMessage()));
+//
+//        Pageable pageable = PageRequest.of(page, 10);
+//
+//        Page<Order> findOrderList = orderJpaRepository.findOrderByBuyer(buyer, pageable);
+//
+//        List<BuyOrderDto> buyOrderDtoList = findOrderList.stream()
+//                .map(order -> new BuyOrderDto(
+//                        order.getProduct().getProductName(),
+//                        order.getSeller().getNickname(),
+//                        order.getMoney()
+//                ))
+//                .collect(Collectors.toList());
+//
+//        return new PageImpl<>(buyOrderDtoList, pageable, findOrderList.getTotalElements());
+//    }
 
 }

@@ -44,4 +44,10 @@ public class ProductController {
 
         return "index.html";
     }
+
+    @GetMapping(value = "/myPage")
+    public String myPage(Model model, @RequestParam(value="page", defaultValue="0") int page){
+        model.addAttribute("products", productService.findBuyProducts(page));
+        return "myPage.html";
+    }
 }

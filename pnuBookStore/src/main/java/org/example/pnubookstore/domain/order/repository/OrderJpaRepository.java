@@ -6,8 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface OrderJpaRepository extends JpaRepository<Order, Long> {
 
-    Page<Order> findOrderBySeller(User seller, Pageable pageable);
-    Page<Order> findOrderByBuyer(User seller, Pageable pageable);
+//    List<Order> findOrderBySeller(User seller);
+    Page<Order> findOrderByBuyer(User buyer, Pageable pageable);
 }
