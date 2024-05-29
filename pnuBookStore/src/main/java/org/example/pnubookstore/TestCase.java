@@ -15,6 +15,7 @@ import org.example.pnubookstore.domain.product.entity.Subject;
 import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
 import org.example.pnubookstore.domain.product.entity.constant.UseStatus;
 import org.example.pnubookstore.domain.product.repository.ProductJpaRepository;
+import org.example.pnubookstore.domain.product.repository.SubjectCustomRepositoryImpl;
 import org.example.pnubookstore.domain.product.repository.SubjectJpaRepository;
 import org.example.pnubookstore.domain.product.service.ProductService;
 import org.example.pnubookstore.willdelete.Auction;
@@ -40,6 +41,7 @@ public class TestCase implements ApplicationRunner {
 	private final SubjectJpaRepository subjectJpaRepository;
 	private final ProductJpaRepository productJpaRepository;
 	private final OrderService orderService;
+	private final SubjectCustomRepositoryImpl subjectCustomRepository;
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
@@ -81,13 +83,24 @@ public class TestCase implements ApplicationRunner {
 			Auction.builder().user(user).title("제목20").description("설명20").build()
 		);
 		auctionJpaRepository.saveAll(auctions);
-//
+
 //		subjectJpaRepository.save(Subject.builder()
 //						.subjectName("c++")
 //						.college("something")
 //						.professor("park")
 //						.department("computer")
 //						.build());
+//		subjectJpaRepository.save(Subject.builder()
+//				.subjectName("c++")
+//				.college("something")
+//				.professor("park")
+//				.department("computer")
+//				.build());
+//
+//		List<Subject> subjects = subjectCustomRepository.findSubjects("something", null, null, null);
+//		for(Subject s : subjects){
+//			System.out.println(s.getCollege());
+//		}
 //
 //		CreateProductDto createProductDto = CreateProductDto.builder()
 //				.sellerEmail("rjsdnxogh12@pusan.ac.kr")
