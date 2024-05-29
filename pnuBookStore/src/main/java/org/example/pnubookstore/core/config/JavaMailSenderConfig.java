@@ -26,10 +26,6 @@ public class JavaMailSenderConfig {
     @Bean
     public JavaMailSender javaMailService() {
         final JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-//        System.out.println(host);
-//        System.out.println(port);
-//        System.out.println(adminMail);
-//        System.out.println(adminPassword);
         javaMailSender.setHost(host);
         javaMailSender.setUsername(adminMail);
         javaMailSender.setPassword(adminPassword);
