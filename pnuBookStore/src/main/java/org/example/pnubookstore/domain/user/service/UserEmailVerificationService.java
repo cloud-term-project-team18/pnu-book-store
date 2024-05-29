@@ -32,7 +32,7 @@ public class UserEmailVerificationService {
         String subject = "인증 메일";
         String content = getMailContent(uuid, domain);
 
-		MimeMessage mail = javaMailSender.createMimeMessage();
+		    MimeMessage mail = javaMailSender.createMimeMessage();
         MimeMessageHelper mailHelper = new MimeMessageHelper(mail,"UTF-8");
         try{
             mailHelper.setFrom(String.format("부산대학교 중고거래 <%s>", from));
