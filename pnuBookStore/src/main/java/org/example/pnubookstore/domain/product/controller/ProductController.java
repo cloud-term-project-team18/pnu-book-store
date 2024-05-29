@@ -1,8 +1,11 @@
 package org.example.pnubookstore.domain.product.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.pnubookstore.core.security.CustomUserDetails;
 import org.example.pnubookstore.domain.product.dto.CreateProductDto;
 import org.example.pnubookstore.domain.product.service.ProductService;
+import org.example.pnubookstore.domain.user.entity.User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,8 +42,9 @@ public class ProductController {
     }
 
     @PostMapping(value = "/product")
-    public String registerProudct(CreateProductDto createProductDto) throws IOException {
-        productService.createProduct(createProductDto);
+    public String registerProduct(CreateProductDto createProductDto,
+                                  @AuthenticationPrincipal CustomUserDetails userDetails) throws IOException {
+        productService.createProduct(createProductDto, userDetails.getUser());
 
         return "index.html";
     }
