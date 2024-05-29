@@ -37,7 +37,7 @@ public class TestController {
     public ResponseEntity<List<Subject>> findSubjects(@RequestParam(value = "college") String college,
                                                       @RequestParam(value = "department", required = false) String department,
                                                       @RequestParam(value = "professor", required = false) String professor,
-                                                      @RequestParam(value = "subjectName", required = false) String subjectName){
+                                                      @RequestParam(value = "course", required = false) String subjectName){
         List<Subject> subjects = subjectCustomRepository.findSubjects(
                 college, department, professor, subjectName);
 

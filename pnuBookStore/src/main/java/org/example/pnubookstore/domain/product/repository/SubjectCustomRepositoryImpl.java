@@ -25,22 +25,22 @@ public class SubjectCustomRepositoryImpl implements SubjectCustomRepository{
     }
 
     private BooleanExpression collegeEq(String college){
-        if (college == null) return null;
+        if (college == "") return null;
         return subject.college.eq(college);
     }
 
     private BooleanExpression departmentEq(String department){
-        if (department == null) return null;
+        if (department == "") return null;
         return subject.department.eq(department);
     }
 
     private BooleanExpression professorEq(String professor){
-        if (professor == null) return null;
+        if (professor == "") return null;
         return subject.professor.eq(professor);
     }
 
     private BooleanExpression subjectNameEq(String subjectName){
-        if (subjectName == null) return null;
+        if (subjectName == "") return null;
         return subject.subjectName.eq(subjectName);
     }
 }

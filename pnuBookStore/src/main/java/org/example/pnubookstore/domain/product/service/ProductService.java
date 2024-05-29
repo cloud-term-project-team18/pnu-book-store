@@ -87,9 +87,17 @@ public class ProductService {
     // 물품명, 가격, 저자, 물품 이미지
     public Page<FindProductsDto> findProductList(int page, String college, String department, String professor, String subjectName){
         Pageable pageable = PageRequest.of(page, 10);
-        Page<Product> productList = productJpaRepository.findAll(pageable);
-//        List<Subject> subjects = subjectCustomRepository.findSubjects(
-//                college, department, professor, subjectName);
+        Page<Product> productList = null;
+
+        if(college == "" && department == "" && professor == "" && subjectName == ""){
+            productList = productJpaRepository.findAll(pageable);
+        }
+        else{
+            List<Subject> subjects = subjectCustomRepository.findSubjects(
+                    college, department, professor, subjectName);
+            productList = productJpaRepository.findBySubjectIn(pageable, subjects);
+        }
+
         List<FindProductsDto> findProductsDtoList = new ArrayList<>();
 
         for (Product product : productList){
@@ -99,7 +107,12 @@ public class ProductService {
 //            String pictureUrl = productPicture.getUrl();
 
             findProductsDtoList.add(
-                    new FindProductsDto(product.getProductName(), product.getSeller().getNickname(), product.getPrice())
+                    FindProductsDto.builder()
+                            .productId(product.getId())
+                            .productName(product.getProductName())
+                            .price(product.getPrice())
+                            .seller(product.getSeller().getNickname())
+                            .build()
             );
         }
 

@@ -84,12 +84,12 @@ public class TestCase implements ApplicationRunner {
 		);
 		auctionJpaRepository.saveAll(auctions);
 
-//		subjectJpaRepository.save(Subject.builder()
-//						.subjectName("c++")
-//						.college("something")
-//						.professor("park")
-//						.department("computer")
-//						.build());
+		subjectJpaRepository.save(Subject.builder()
+						.subjectName("c++")
+						.college("something")
+						.professor("park")
+						.department("computer")
+						.build());
 //		subjectJpaRepository.save(Subject.builder()
 //				.subjectName("c++")
 //				.college("something")
@@ -102,28 +102,27 @@ public class TestCase implements ApplicationRunner {
 //			System.out.println(s.getCollege());
 //		}
 //
-//		CreateProductDto createProductDto = CreateProductDto.builder()
+		CreateProductDto createProductDto = CreateProductDto.builder()
 //				.sellerEmail("rjsdnxogh12@pusan.ac.kr")
-//				.productName("book1")
-//				.price(10000)
-//				.description("something")
-//				.college("something")
-//				.author("kim")
-//				.pubDate(LocalDateTime.now())
-//				.isBargain(true)
-//				.canBargainReason("any")
-//				.saleStatus(SaleStatus.NOT_YET)
-//				.underline(UseStatus.NO)
-//				.note(UseStatus.NO)
-//				.naming(true)
-//				.discolor(true)
-//				.damage(true)
-//				.subjectName("c++")
-//				.professor("park")
-//				.department("computer")
-//				.build();
-////
-//		productService.createProduct(createProductDto);
+				.productName("book1")
+				.price(10000)
+				.description("something")
+				.college("something")
+				.author("kim")
+				.underline(UseStatus.NO)
+				.note(UseStatus.NO)
+				.naming(true)
+				.discolor(true)
+				.damage(true)
+				.subjectName("c++")
+				.professor("park")
+				.department("computer")
+				.password("1")
+				.lockerNumber("1")
+				.buildingName("제6공학관")
+				.build();
+//
+		productService.createProduct(createProductDto);
 //		Product product = productJpaRepository.findByIdFetchJoin(1L)
 //						.orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
 //		productService.deleteProduct(product.getId());

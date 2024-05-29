@@ -62,8 +62,8 @@
                 course: course
             },
             success: function (data) {
-                data.forEach(product => {
-                    $('#product-list').append('<div class="col"><div class="card"><div class="card-body"><h5 class="card-title">' + product.name + '</h5><p class="card-text">가격: ₩' + product.price + '</p></div></div></div>');
+                data.content.forEach(product => {
+                    $('#product-list').append('<div class="col"><div class="card"><div class="card-body"><h5 class="card-title">' + product.productName + '</h5><p class="card-text">가격: ₩' + product.price + '</p></div></div></div>');
                 });
                 page++;
             },
