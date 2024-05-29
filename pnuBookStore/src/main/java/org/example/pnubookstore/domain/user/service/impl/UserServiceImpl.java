@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -47,7 +48,7 @@ public class UserServiceImpl implements UserService {
 			.build());
 	}
 
-	public void emailVerify(String email){
+	public void emailVerify(String email, HttpServletRequest request){
 		boolean matched = email.matches("^[a-zA-Z0-9._%+-]+@pusan\\.ac\\.kr$");
 		if(!matched){
 			throw new IllegalArgumentException("유효 하지 않은 메일 형식 입니다");
@@ -58,8 +59,20 @@ public class UserServiceImpl implements UserService {
 		// uuid와 id를 redis에 저장
 		userEmailVerificationRedisRepository.save(new EmailVerification(uuid, email));
 		// 메일 보내기
-		userEmailVerificationService.sendVerifyEmail(email, uuid);
+		userEmailVerificationService.sendVerifyEmail(email, uuid, getDomain(request));
 
 	}
+	private String getDomain(HttpServletRequest request) {
+		StringBuilder sb = new StringBuilder();
+		String scheme = request.getScheme();
+		String serverName = request.getServerName();
+		int serverPort = request.getServerPort();
 
+		sb.append(scheme).append("://").append(serverName);
+		if (serverPort != 80 && serverPort != 443) {
+			sb.append(":").append(serverPort);
+		}
+
+		return sb.toString();
+	}
 }
