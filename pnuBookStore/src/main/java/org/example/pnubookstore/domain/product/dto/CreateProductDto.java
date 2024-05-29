@@ -20,13 +20,13 @@ import java.util.List;
 @AllArgsConstructor
 public class CreateProductDto {
 
-    private String sellerEmail;
+//    private String sellerEmail;
 
     private String productName;
     private Integer price;
     private String description;
     private String author;
-    private LocalDateTime pubDate;
+//    private LocalDateTime pubDate;
     private UseStatus underline;
     private UseStatus note;
     private Boolean naming;
@@ -46,5 +46,5 @@ public class CreateProductDto {
 
     // 아직 이미지는 넣지 않은 상태
     // 이미지는 리스트로
-    private List<MultipartFile> productPictureList;
+    private MultipartFile productPicture;
 }

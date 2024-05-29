@@ -19,9 +19,7 @@ public class ProductController {
 
     // 물품 리스트
     @GetMapping(value = "/products")
-    public String products(Model model, @RequestParam(value="page", defaultValue="0") int page){
-        model.addAttribute("products", productService.findProductList(page));
-
+    public String products(){
         return "board/auction-board.html";
     }
 
@@ -40,8 +38,10 @@ public class ProductController {
         return "board/product-register.html";
     }
 
-//    @PostMapping(value = "/product")
-//    public void registerProudct(CreateProductDto createProductDto) throws IOException {
-//        productService.createProduct(createProductDto);
-//    }
+    @PostMapping(value = "/product")
+    public String registerProudct(CreateProductDto createProductDto) throws IOException {
+        productService.createProduct(createProductDto);
+
+        return "index.html";
+    }
 }

@@ -12,10 +12,10 @@
             <div class="card shadow-lg p-3 mb-5 bg-body rounded">
                 <div class="card-body">
                     <h1 class="card-title text-center mb-4">판매 물품 등록</h1>
-                    <form id="productForm" class="needs-validation" novalidate enctype="multipart/form-data" action="/registerProduct" method="post">
+                    <form id="productForm" class="needs-validation" novalidate enctype="multipart/form-data" action="/product" method="post">
                         <div class="mb-3">
                             <label for="title" class="form-label">물품 이름:</label>
-                            <input type="text" class="form-control" id="title" name="title" required>
+                            <input type="text" class="form-control" id="title" name="productName" required>
                             <div class="invalid-feedback">물품 이름을 입력해주세요.</div>
                         </div>
                         <div class="mb-3 row">
@@ -42,7 +42,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="subject" class="form-label">과목:</label>
-                                <select class="form-select" id="subject" name="subject" required>
+                                <select class="form-select" id="subject" name="subjectName" required>
                                     <option value="">과목</option>
                                 </select>
                                 <div class="invalid-feedback">과목을 선택해주세요.</div>
@@ -59,75 +59,70 @@
                             <div class="invalid-feedback">가격을 입력해주세요.</div>
                         </div>
                         <div class="mb-3">
-                            <label for="author" class="form-label">저자:</label>
-                            <input type="text" class="form-control" id="author" name="author" required>
-                            <div class="invalid-feedback">저자을 입력해주세요.</div>
-                        </div>
-                        <div class="mb-3">
                             <label for="image" class="form-label">이미지 업로드:</label>
-                            <input class="form-control" type="file" id="image" name="image" accept="image/*" required>
+                            <input class="form-control" type="file" id="image" name="productPicture" accept="image/*" required>
                             <div class="invalid-feedback">이미지를 업로드해주세요.</div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">이름 기입:</label>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="nameYes" name="nameWritten" value="yes" required>
+                                <input class="form-check-input" type="radio" id="nameYes" name="naming" value="yes" required>
                                 <label class="form-check-label" for="nameYes">예</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="nameNo" name="nameWritten" value="no" required>
+                                <input class="form-check-input" type="radio" id="nameNo" name="naming" value="no" required>
                                 <label class="form-check-label" for="nameNo">아니오</label>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">페이지 변색:</label>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="discolorYes" name="pageDiscoloration" value="yes" required>
+                                <input class="form-check-input" type="radio" id="discolorYes" name="discolor" value="yes" required>
                                 <label class="form-check-label" for="discolorYes">예</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="discolorNo" name="pageDiscoloration" value="no" required>
+                                <input class="form-check-input" type="radio" id="discolorNo" name="discolor" value="no" required>
                                 <label class="form-check-label" for="discolorNo">아니오</label>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">페이지 훼손:</label>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="damageYes" name="pageDamage" value="yes" required>
+                                <input class="form-check-input" type="radio" id="damageYes" name="damage" value="yes" required>
                                 <label class="form-check-label" for="damageYes">예</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="damageNo" name="pageDamage" value="no" required>
+                                <input class="form-check-input" type="radio" id="damageNo" name="damage" value="no" required>
                                 <label class="form-check-label" for="damageNo">아니오</label>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">밑줄 여부:</label>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="underlineNone" name="underline" value="none" required>
+                                <input class="form-check-input" type="radio" id="underlineNone" name="underline" value="NO" required>
                                 <label class="form-check-label" for="underlineNone">없음</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="underlinePencil" name="underline" value="pencil" required>
+                                <input class="form-check-input" type="radio" id="underlinePencil" name="underline" value="PENCIL" required>
                                 <label class="form-check-label" for="underlinePencil">연필</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="underlinePen" name="underline" value="pen" required>
+                                <input class="form-check-input" type="radio" id="underlinePen" name="underline" value="PEN" required>
                                 <label class="form-check-label" for="underlinePen">볼펜</label>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">필기 여부:</label>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="writingNone" name="writing" value="none" required>
+                                <input class="form-check-input" type="radio" id="writingNone" name="note" value="NO" required>
                                 <label class="form-check-label" for="writingNone">없음</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="writingPencil" name="writing" value="pencil" required>
+                                <input class="form-check-input" type="radio" id="writingPencil" name="note" value="PENCIL" required>
                                 <label class="form-check-label" for="writingPencil">연필</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="writingPen" name="writing" value="pen" required>
+                                <input class="form-check-input" type="radio" id="writingPen" name="note" value="PEN" required>
                                 <label class="form-check-label" for="writingPen">볼펜</label>
                             </div>
                         </div>

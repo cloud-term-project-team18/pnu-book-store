@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,12 +42,14 @@ public class ProductService {
     private final LocationJpaRepository locationJpaRepository;
     private final S3Uploader s3Uploader;
     private final PasswordEncoder passwordEncoder;
+    private final SubjectCustomRepositoryImpl subjectCustomRepository;
 
     @Transactional
     // 물품 등록
     public void createProduct(CreateProductDto createProductDto) throws IOException {
         // 유저 존재 여부 체크(추후 변경될 수 있음)
-        User findedSeller = findUser(createProductDto);
+        User findedSeller = userJpaRepositoryForProduct.findById(1L).orElseThrow();
+//        User findedSeller = findUser(createProductDto);
 
         // 과목 존재 여부 체크
         Subject findedSubject = findSubject(createProductDto);
@@ -82,10 +85,11 @@ public class ProductService {
 
     // 물품 리스트 조회
     // 물품명, 가격, 저자, 물품 이미지
-    public Page<FindProductsDto> findProductList(int page){
+    public Page<FindProductsDto> findProductList(int page, String college, String department, String professor, String subjectName){
         Pageable pageable = PageRequest.of(page, 10);
         Page<Product> productList = productJpaRepository.findAll(pageable);
-
+//        List<Subject> subjects = subjectCustomRepository.findSubjects(
+//                college, department, professor, subjectName);
         List<FindProductsDto> findProductsDtoList = new ArrayList<>();
 
         for (Product product : productList){
@@ -104,7 +108,7 @@ public class ProductService {
 
     @Transactional
     public void updateProduct(Long productId, CreateProductDto updateProductDto) throws IOException {
-        findUser(updateProductDto);
+//        findUser(updateProductDto);
 
         Product findedProduct = productJpaRepository.findById(productId)
                 .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
@@ -130,10 +134,10 @@ public class ProductService {
         productJpaRepository.delete(findedProduct);
     }
 
-    private User findUser(CreateProductDto createProductDto){
-        return userJpaRepositoryForProduct.findUserByEmail(createProductDto.getSellerEmail())
-                .orElseThrow(() -> new Exception404(ProductExceptionStatus.USER_NOT_FOUND.getErrorMessage()));
-    }
+//    private User findUser(CreateProductDto createProductDto){
+//        return userJpaRepositoryForProduct.findUserByEmail(createProductDto.getSellerEmail())
+//                .orElseThrow(() -> new Exception404(ProductExceptionStatus.USER_NOT_FOUND.getErrorMessage()));
+//    }
 
     private Subject findSubject(CreateProductDto createProductDto){
         return subjectJpaRepository.findBySubjectNameAndCollegeAndDepartmentAndProfessor(
@@ -159,7 +163,7 @@ public class ProductService {
                         .price(createProductDto.getPrice())
                         .description(createProductDto.getDescription())
                         .author(createProductDto.getAuthor())
-                        .pubDate(createProductDto.getPubDate())
+                        .pubDate(LocalDateTime.now())
                         .saleStatus(SaleStatus.NOT_YET)
                         .underline(createProductDto.getUnderline())
                         .note(createProductDto.getNote())
