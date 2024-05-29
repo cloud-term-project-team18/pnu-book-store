@@ -31,7 +31,7 @@ public class UserEmailVerificationService {
     public void sendVerifyEmail(String email, String uuid, String domain){
         String subject = "인증 메일";
         String content = "메일 테스트 내용";
-        content += String.format("<a href=\"%s/signUp/after-email?uuid=\">링크 클릭</a>", domain);
+        content += String.format("<a href=\"%s/signUp/after-email?uuid=%s\">링크 클릭</a>", domain, uuid);
 
 		MimeMessage mail = javaMailSender.createMimeMessage();
         MimeMessageHelper mailHelper = new MimeMessageHelper(mail,"UTF-8");
