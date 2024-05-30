@@ -127,8 +127,8 @@ public class TestCase implements ApplicationRunner {
 //						.orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
 //		productService.deleteProduct(product.getId());
 
-		CreateOrderDto createOrderDto = new CreateOrderDto(1L, "taeho", "taeho1", 10);
-		orderService.createOrder(createOrderDto);
+		CreateOrderDto createOrderDto = new CreateOrderDto(1L, "taeho1", 10);
+		orderService.createOrder(createOrderDto, user);
 
 
 

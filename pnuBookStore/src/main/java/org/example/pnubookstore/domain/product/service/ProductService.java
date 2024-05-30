@@ -74,13 +74,12 @@ public class ProductService {
         Product findedProduct = productJpaRepository.findByIdFetchJoin(productId)
                 .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
 
-        List<String> productPictureUrlList = productPictureJpaRepository.findAllByProduct(findedProduct)
-                .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_PICTURES_NOT_FOUND.getErrorMessage()))
-                .stream()
-                .map(ProductPicture::getUrl)
-                .toList();
+//        ProductPicture productPicture = productPictureJpaRepository.findByProduct(findedProduct)
+//                .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_PICTURES_NOT_FOUND.getErrorMessage()));
 
-        return FindProductDto.of(findedProduct, productPictureUrlList);
+
+//        return FindProductDto.of(findedProduct, productPicture.getUrl());
+        return FindProductDto.of(findedProduct, "http://example.com");
     }
 
     // 물품 리스트 조회
@@ -147,10 +146,11 @@ public class ProductService {
         productJpaRepository.delete(findedProduct);
     }
 
-    public List<BuyProductDto> findBuyProducts(int page){
+    public List<BuyProductDto> findBuyProducts(int page, User user){
         Pageable pageable = PageRequest.of(page, 10);
 
-        User findBuyer = userJpaRepositoryForProduct.findById(1L).orElseThrow();
+//        User findBuyer = userJpaRepositoryForProduct.findById(1L).orElseThrow();
+        User findBuyer = findUser(user);
         Page<Order> orders = orderJpaRepository.findOrderByBuyer(findBuyer, pageable);
 
         List<BuyProductDto> buyProductDtos = new ArrayList<>();

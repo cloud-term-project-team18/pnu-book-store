@@ -33,21 +33,21 @@ public class OrderService {
     private final UserJpaRepositoryForOrder userJpaRepositoryForOrder;
 
     @Transactional
-    public void createOrder(CreateOrderDto createOrderDto){
+    public void createOrder(CreateOrderDto createOrderDto, User buyer){
         Product findedProduct = productJpaRepositoryForOrder.findById(createOrderDto.getProductId())
                         .orElseThrow(() -> new Exception404(OrderExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
 
         findedProduct.changeSaleStatus(SaleStatus.SOLD);
 
-        if(createOrderDto.getBuyerNickname().equals(createOrderDto.getSellerNickname())){
+        if(buyer.getNickname().equals(createOrderDto.getSellerNickname())){
             throw new Exception404(OrderExceptionStatus.SAME_SELLER_BUYER.getErrorMessage());
         }
 
         User seller = userJpaRepositoryForOrder.findByNickname(createOrderDto.getSellerNickname())
                         .orElseThrow(() -> new Exception404(OrderExceptionStatus.USER_NOT_FOUND.getErrorMessage()));
 
-        User buyer = userJpaRepositoryForOrder.findByNickname(createOrderDto.getBuyerNickname())
-                .orElseThrow(() -> new Exception404(OrderExceptionStatus.USER_NOT_FOUND.getErrorMessage()));
+//        User buyer = userJpaRepositoryForOrder.findByNickname(createOrderDto.getBuyerNickname())
+//                .orElseThrow(() -> new Exception404(OrderExceptionStatus.USER_NOT_FOUND.getErrorMessage()));
 
         orderJpaRepository.save(Order.builder()
                 .product(findedProduct)

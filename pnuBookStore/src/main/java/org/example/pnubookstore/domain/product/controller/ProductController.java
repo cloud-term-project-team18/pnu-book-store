@@ -46,12 +46,13 @@ public class ProductController {
                                   @AuthenticationPrincipal CustomUserDetails userDetails) throws IOException {
         productService.createProduct(createProductDto, userDetails.getUser());
 
-        return "index.html";
+        return "board/auction-board.htm";
     }
 
     @GetMapping(value = "/myPage")
-    public String myPage(Model model, @RequestParam(value="page", defaultValue="0") int page){
-        model.addAttribute("products", productService.findBuyProducts(page));
+    public String myPage(Model model, @RequestParam(value="page", defaultValue="0") int page,
+                         @AuthenticationPrincipal CustomUserDetails userDetails){
+        model.addAttribute("products", productService.findBuyProducts(page, userDetails.getUser()));
         return "myPage.html";
     }
 }

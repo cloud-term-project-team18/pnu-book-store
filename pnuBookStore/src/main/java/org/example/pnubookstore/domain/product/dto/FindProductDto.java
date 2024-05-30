@@ -32,9 +32,9 @@ public class FindProductDto {
     private Boolean naming;
     private Boolean discolor;
     private Boolean damage;
-    private List<String> productPictureList;
+    private String productPictureUrl;
 
-    public static FindProductDto of(Product product, List<String> urlList){
+    public static FindProductDto of(Product product, String productPictureUrl){
         return FindProductDto.builder()
                 .id(product.getId())
                 .sellerName(product.getSeller().getNickname())
@@ -52,7 +52,7 @@ public class FindProductDto {
                 .naming(product.getNaming())
                 .discolor(product.getDiscolor())
                 .damage(product.getDamage())
-                .productPictureList(urlList)
+                .productPictureUrl(productPictureUrl)
                 .build();
     }
 }

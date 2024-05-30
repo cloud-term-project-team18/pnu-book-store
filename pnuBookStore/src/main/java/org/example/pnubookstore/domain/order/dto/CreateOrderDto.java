@@ -9,7 +9,7 @@ import org.example.pnubookstore.domain.user.entity.User;
 @AllArgsConstructor
 public class CreateOrderDto {
     private Long productId;
-    private String buyerNickname;
+//    private String buyerNickname;
     private String sellerNickname;
     private int money; // Not null
 }
