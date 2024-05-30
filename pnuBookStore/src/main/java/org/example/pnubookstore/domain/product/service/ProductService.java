@@ -14,7 +14,6 @@ import org.example.pnubookstore.domain.product.entity.Subject;
 import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
 import org.example.pnubookstore.domain.product.repository.*;
 import org.example.pnubookstore.domain.user.entity.User;
-import org.hibernate.annotations.processing.Find;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -66,7 +65,7 @@ public class ProductService {
         createdLocation.setProduct(createdProduct);
 
         // 물품 사진 저장(추후 변경 예정)
-//        saveImages(createProductDto.getProductPictureList(), createdProduct);
+        saveImage(createProductDto.getProductPicture(), createdProduct);
     }
 
     // 물품 조회
@@ -74,12 +73,12 @@ public class ProductService {
         Product findedProduct = productJpaRepository.findByIdFetchJoin(productId)
                 .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
 
-//        ProductPicture productPicture = productPictureJpaRepository.findByProduct(findedProduct)
-//                .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_PICTURES_NOT_FOUND.getErrorMessage()));
+        ProductPicture productPicture = productPictureJpaRepository.findByProduct(findedProduct)
+                .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_PICTURES_NOT_FOUND.getErrorMessage()));
 
 
-//        return FindProductDto.of(findedProduct, productPicture.getUrl());
-        return FindProductDto.of(findedProduct, "http://example.com");
+        return FindProductDto.of(findedProduct, productPicture.getUrl());
+//        return FindProductDto.of(findedProduct, "http://example.com");
     }
 
     // 물품 리스트 조회
@@ -207,15 +206,13 @@ public class ProductService {
                         .build());
     }
 
-    private void saveImages(List<MultipartFile> imageFiles, Product product) throws IOException {
-        for(MultipartFile imageFile : imageFiles){
+    private void saveImage(MultipartFile imageFile, Product product) throws IOException {
             String imageUrl = s3Uploader.uploadFile(imageFile);
             productPictureJpaRepository.save(
                     ProductPicture.builder()
                             .url(imageUrl)
                             .product(product)
                             .build());
-        }
     }
 
     private Location saveLocation(CreateProductDto createProductDto){

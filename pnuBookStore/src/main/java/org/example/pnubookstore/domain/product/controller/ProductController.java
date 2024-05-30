@@ -46,7 +46,7 @@ public class ProductController {
                                   @AuthenticationPrincipal CustomUserDetails userDetails) throws IOException {
         productService.createProduct(createProductDto, userDetails.getUser());
 
-        return "board/auction-board.htm";
+        return "board/auction-board.html";
     }
 
     @GetMapping(value = "/myPage")

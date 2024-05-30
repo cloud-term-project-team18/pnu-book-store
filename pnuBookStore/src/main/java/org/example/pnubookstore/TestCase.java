@@ -122,13 +122,13 @@ public class TestCase implements ApplicationRunner {
 				.buildingName("제6공학관")
 				.build();
 //
-		productService.createProduct(createProductDto, user);
-//		Product product = productJpaRepository.findByIdFetchJoin(1L)
-//						.orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
-//		productService.deleteProduct(product.getId());
-
-		CreateOrderDto createOrderDto = new CreateOrderDto(1L, "taeho1", 10);
-		orderService.createOrder(createOrderDto, user);
+//		productService.createProduct(createProductDto, user);
+////		Product product = productJpaRepository.findByIdFetchJoin(1L)
+////						.orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
+////		productService.deleteProduct(product.getId());
+//
+//		CreateOrderDto createOrderDto = new CreateOrderDto(1L, "taeho1", 10);
+//		orderService.createOrder(createOrderDto, user);
 
 
 
