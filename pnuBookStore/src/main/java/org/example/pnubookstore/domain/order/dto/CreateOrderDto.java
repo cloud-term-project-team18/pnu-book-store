@@ -11,5 +11,5 @@ public class CreateOrderDto {
     private Long productId;
 //    private String buyerNickname;
     private String sellerNickname;
-    private int money; // Not null
+    private Integer price; // Not null
 }

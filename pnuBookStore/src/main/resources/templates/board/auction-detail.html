@@ -30,8 +30,10 @@
 <!--                </form>-->
 <!--            </div>-->
             <div th:if="${product.saleStatus} != ${T(org.example.pnubookstore.domain.product.entity.constant.SaleStatus).NOT_YET}">
-                <form th:action="@{/purchase/{id}(id=${product.id})}" method="post">
-                    <input type="hidden" name="productId" th:value="${product.id}">
+                <form th:action="@{/order}" method="post">
+                    <input type="hidden" name="productId" th:value="${product.productId}">
+                    <input type="hidden" name="sellerNickname" th:value="${product.sellerName}">
+                    <input type="hidden" name="price" th:value="${product.price}">
                     <button class="btn btn-success" type="submit">구매하기</button>
                 </form>
             </div>

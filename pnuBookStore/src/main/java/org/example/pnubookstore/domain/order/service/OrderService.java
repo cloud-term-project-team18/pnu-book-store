@@ -53,7 +53,7 @@ public class OrderService {
                 .product(findedProduct)
                 .seller(seller)
                 .buyer(buyer)
-                .money(createOrderDto.getMoney())
+                .money(createOrderDto.getPrice())
                 .build());
     }
 

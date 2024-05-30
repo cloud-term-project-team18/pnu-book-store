@@ -52,13 +52,13 @@ public class TestCase implements ApplicationRunner {
 			.role(Role.ROLE_USER)
 			.build();
 		userJpaRepository.save(user);
-		User user1 = User.builder()
-				.email("rjsdnxogh13@pusan.ac.kr")
-				.password(passwordEncoder.encode("qwer1234"))
-				.nickname("taeho1")
-				.role(Role.ROLE_USER)
-				.build();
-		userJpaRepository.save(user1);
+//		User user1 = User.builder()
+//				.email("rjsdnxogh13@pusan.ac.kr")
+//				.password(passwordEncoder.encode("qwer1234"))
+//				.nickname("taeho1")
+//				.role(Role.ROLE_USER)
+//				.build();
+//		userJpaRepository.save(user1);
 //
 //		List<Auction> auctions = List.of(
 //			Auction.builder().user(user).title("제목1").description("설명1").build(),
@@ -83,13 +83,13 @@ public class TestCase implements ApplicationRunner {
 //			Auction.builder().user(user).title("제목20").description("설명20").build()
 //		);
 //		auctionJpaRepository.saveAll(auctions);
-
-		subjectJpaRepository.save(Subject.builder()
-						.subjectName("c++")
-						.college("something")
-						.professor("park")
-						.department("computer")
-						.build());
+//
+//		subjectJpaRepository.save(Subject.builder()
+//						.subjectName("c++")
+//						.college("something")
+//						.professor("park")
+//						.department("computer")
+//						.build());
 //		subjectJpaRepository.save(Subject.builder()
 //				.subjectName("c++")
 //				.college("something")
@@ -102,27 +102,27 @@ public class TestCase implements ApplicationRunner {
 //			System.out.println(s.getCollege());
 //		}
 //
-		CreateProductDto createProductDto = CreateProductDto.builder()
+//		CreateProductDto createProductDto = CreateProductDto.builder()
 //				.sellerEmail("rjsdnxogh12@pusan.ac.kr")
-				.productName("book1")
-				.price(10000)
-				.description("something")
-				.college("something")
-				.author("kim")
-				.underline(UseStatus.NO)
-				.note(UseStatus.NO)
-				.naming(true)
-				.discolor(true)
-				.damage(true)
-				.subjectName("c++")
-				.professor("park")
-				.department("computer")
-				.password("1")
-				.lockerNumber("1")
-				.buildingName("제6공학관")
-				.build();
+//				.productName("book1")
+//				.price(10000)
+//				.description("something")
+//				.college("something")
+//				.author("kim")
+//				.underline(UseStatus.NO)
+//				.note(UseStatus.NO)
+//				.naming(true)
+//				.discolor(true)
+//				.damage(true)
+//				.subjectName("c++")
+//				.professor("park")
+//				.department("computer")
+//				.password("1")
+//				.lockerNumber("1")
+//				.buildingName("제6공학관")
+//				.build();
 //
-//		productService.createProduct(createProductDto, user);
+//		productService.createProduct(createProductDto, user1);
 ////		Product product = productJpaRepository.findByIdFetchJoin(1L)
 ////						.orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
 ////		productService.deleteProduct(product.getId());
