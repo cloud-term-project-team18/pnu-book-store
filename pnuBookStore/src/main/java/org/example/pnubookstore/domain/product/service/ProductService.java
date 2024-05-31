@@ -124,16 +124,17 @@ public class ProductService {
         Product findedProduct = productJpaRepository.findById(productId)
                 .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
 
-        Subject findedSubject = findSubject(updateProductDto);
+        Subject foundSubject = findSubject(updateProductDto);
+
 
         Location findedLocation = findedProduct.getLocation();
         findedLocation.updateLocation(updateProductDto);
 
 
-        findedProduct.updateProduct(updateProductDto, findedSubject);
+        findedProduct.updateProduct(updateProductDto, foundSubject);
 
         // 이미지 변경
-//        productPictureJpaRepository.deleteAllByProduct(findedProduct);
+//        productPictureJpaRepository.deleteAllByProduct(findedProduct);s
 //        saveImages(updateProductDto.getProductPictureList(), findedProduct);
     }
 
@@ -173,8 +174,12 @@ public class ProductService {
     }
 
     private Subject findSubject(CreateProductDto createProductDto){
-        return subjectJpaRepository.findBySubjectNameAndCollegeAndDepartmentAndProfessor(
-                createProductDto.getSubjectName(), createProductDto.getCollege(), createProductDto.getDepartment(), createProductDto.getProfessor());
+        List<Subject> result = subjectJpaRepository.findAllBySubjectNameAndCollegeAndDepartmentAndProfessor(
+            createProductDto.getSubjectName(), createProductDto.getCollege(), createProductDto.getDepartment(), createProductDto.getProfessor());
+        if (result.isEmpty())
+            throw new Exception404(ProductExceptionStatus.SUBJECT_NOT_FOUND.getErrorMessage());
+
+        return result.get(0);
     }
 
     private Subject saveSubject(CreateProductDto createProductDto){

@@ -9,8 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SubjectJpaRepository extends JpaRepository<Subject, Long> {
-    Subject findBySubjectNameAndCollegeAndDepartmentAndProfessor(
-            String subjectName, String college, String department, String professor);
+
+    List<Subject> findAllBySubjectNameAndCollegeAndDepartmentAndProfessor(
+            @Param("subjectName") String subjectName,
+            @Param("college") String college,
+            @Param("department") String department,
+            @Param("professor") String professor);
 
     @Query("SELECT DISTINCT s.college FROM Subject s")
     List<String> findColleges();
