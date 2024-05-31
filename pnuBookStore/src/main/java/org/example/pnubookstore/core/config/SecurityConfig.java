@@ -91,7 +91,9 @@ public class SecurityConfig {
 		http.authorizeHttpRequests(authorize ->
 			authorize
 				.requestMatchers(
-					new AntPathRequestMatcher("/board/auction/**")
+					new AntPathRequestMatcher("/product-register/**"),
+					new AntPathRequestMatcher("myPage"),
+					new AntPathRequestMatcher("order/**")
 				).authenticated()
 				.anyRequest()
 				.permitAll());
