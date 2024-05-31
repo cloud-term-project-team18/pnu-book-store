@@ -105,7 +105,7 @@ public class Product extends AuditingEntity {
 		this.price = productDto.getPrice();
 		this.description = productDto.getDescription();
 		this.author = productDto.getAuthor();
-		this.pubDate = productDto.getPubDate();
+		this.pubDate = LocalDateTime.now();
 		this.underline = productDto.getUnderline();
 		this.note = productDto.getNote();
 		this.naming = productDto.getDiscolor();

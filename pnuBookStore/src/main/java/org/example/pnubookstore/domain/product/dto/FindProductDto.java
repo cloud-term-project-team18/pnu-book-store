@@ -6,7 +6,6 @@ import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
 import org.example.pnubookstore.domain.product.entity.constant.UseStatus;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -15,7 +14,7 @@ import java.util.List;
 @Builder
 @ToString
 public class FindProductDto {
-    private Long id;
+    private Long productId;
     private String sellerName;
     private String subjectName;
     private String professor;
@@ -32,11 +31,15 @@ public class FindProductDto {
     private Boolean naming;
     private Boolean discolor;
     private Boolean damage;
-    private List<String> productPictureList;
+    private String productPictureUrl;
 
-    public static FindProductDto of(Product product, List<String> urlList){
+    private String buildingName;
+    private String lockerNumber;
+    private String password;
+
+    public static FindProductDto of(Product product, String productPictureUrl){
         return FindProductDto.builder()
-                .id(product.getId())
+                .productId(product.getId())
                 .sellerName(product.getSeller().getNickname())
                 .subjectName(product.getSubject().getSubjectName())
                 .professor(product.getSubject().getProfessor())
@@ -52,7 +55,10 @@ public class FindProductDto {
                 .naming(product.getNaming())
                 .discolor(product.getDiscolor())
                 .damage(product.getDamage())
-                .productPictureList(urlList)
+                .productPictureUrl(productPictureUrl)
+                .buildingName(product.getLocation().getBuildingName())
+                .lockerNumber(product.getLocation().getLockerNumber())
+                .password(product.getLocation().getPassword())
                 .build();
     }
 }
