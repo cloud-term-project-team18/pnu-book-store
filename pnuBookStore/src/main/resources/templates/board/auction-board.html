@@ -63,7 +63,18 @@
             },
             success: function (data) {
                 data.content.forEach(product => {
-                    $('#product-list').append('<div class="col"><div class="card"><div class="card-body"><h5 class="card-title">' + product.productName + '</h5><p class="card-text">가격: ₩' + product.price + '</p></div></div></div>');
+                    $('#product-list').append(
+                        '<div class="col">' +
+                        '<a href="/products/{productId}" class="card-link">' +
+                        '<div class="card">' +
+                        '<div class="card-body">' +
+                        '<h5 class="card-title">' + product.productName + '</h5>' +
+                        '<p class="card-text">가격: ₩' + product.price + '</p>' +
+                        '</div>' +
+                        '</div>' +
+                        '</a>' +
+                        '</div>'
+                    );
                 });
                 page++;
             },
@@ -128,7 +139,6 @@
                 $('#course').empty().append('<option value="">강좌명</option>');
             }
         });
-
 
         loadMoreProducts(); // 페이지 로드 시 첫 페이지 로드
 
