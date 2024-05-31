@@ -62,9 +62,6 @@
                     .then(data => {
                         document.getElementById('successMessage').classList.remove('d-none');
                         document.getElementById('errorMessage').classList.add('d-none');
-                        // 인증 성공 후 회원가입 페이지로 리다이렉트
-                        var email = document.getElementById('email').value;
-                        window.location.href = `/signUp?email=${encodeURIComponent(email)}`;
                     })
                     .catch(error => {
                         document.getElementById('errorMessage').classList.remove('d-none');
