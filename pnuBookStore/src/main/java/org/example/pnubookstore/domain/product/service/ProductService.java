@@ -3,11 +3,10 @@ package org.example.pnubookstore.domain.product.service;
 import lombok.RequiredArgsConstructor;
 import org.example.pnubookstore.core.exception.Exception404;
 import org.example.pnubookstore.core.s3.S3Uploader;
-import org.example.pnubookstore.domain.product.dto.CreateProductDto;
+import org.example.pnubookstore.domain.order.entity.Order;
+import org.example.pnubookstore.domain.order.repository.OrderJpaRepository;
+import org.example.pnubookstore.domain.product.dto.*;
 import org.example.pnubookstore.domain.product.ProductExceptionStatus;
-import org.example.pnubookstore.domain.product.dto.FindProductDto;
-import org.example.pnubookstore.domain.product.dto.FindProductsDto;
-import org.example.pnubookstore.domain.product.dto.UpdateProductDto;
 import org.example.pnubookstore.domain.product.entity.Location;
 import org.example.pnubookstore.domain.product.entity.Product;
 import org.example.pnubookstore.domain.product.entity.ProductPicture;
@@ -15,7 +14,6 @@ import org.example.pnubookstore.domain.product.entity.Subject;
 import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
 import org.example.pnubookstore.domain.product.repository.*;
 import org.example.pnubookstore.domain.user.entity.User;
-import org.hibernate.annotations.processing.Find;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,12 +40,15 @@ public class ProductService {
     private final LocationJpaRepository locationJpaRepository;
     private final S3Uploader s3Uploader;
     private final PasswordEncoder passwordEncoder;
+    private final SubjectCustomRepositoryImpl subjectCustomRepository;
+    private final OrderJpaRepository orderJpaRepository;
 
     @Transactional
     // 물품 등록
-    public void createProduct(CreateProductDto createProductDto) throws IOException {
+    public void createProduct(CreateProductDto createProductDto, User user) throws IOException {
         // 유저 존재 여부 체크(추후 변경될 수 있음)
-        User findedSeller = findUser(createProductDto);
+//        User findedSeller = userJpaRepositoryForProduct.findById(1L).orElseThrow();
+        User findedSeller = findUser(user);
 
         // 과목 존재 여부 체크
         Subject findedSubject = findSubject(createProductDto);
@@ -63,7 +65,7 @@ public class ProductService {
         createdLocation.setProduct(createdProduct);
 
         // 물품 사진 저장(추후 변경 예정)
-//        saveImages(createProductDto.getProductPictureList(), createdProduct);
+        saveImage(createProductDto.getProductPicture(), createdProduct);
     }
 
     // 물품 조회
@@ -71,20 +73,28 @@ public class ProductService {
         Product findedProduct = productJpaRepository.findByIdFetchJoin(productId)
                 .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
 
-        List<String> productPictureUrlList = productPictureJpaRepository.findAllByProduct(findedProduct)
-                .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_PICTURES_NOT_FOUND.getErrorMessage()))
-                .stream()
-                .map(ProductPicture::getUrl)
-                .toList();
+        ProductPicture productPicture = productPictureJpaRepository.findByProduct(findedProduct)
+                .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_PICTURES_NOT_FOUND.getErrorMessage()));
 
-        return FindProductDto.of(findedProduct, productPictureUrlList);
+
+        return FindProductDto.of(findedProduct, productPicture.getUrl());
+//        return FindProductDto.of(findedProduct, "http://example.com");
     }
 
     // 물품 리스트 조회
     // 물품명, 가격, 저자, 물품 이미지
-    public Page<FindProductsDto> findProductList(int page){
+    public Page<FindProductsDto> findProductList(int page, String college, String department, String professor, String subjectName){
         Pageable pageable = PageRequest.of(page, 10);
-        Page<Product> productList = productJpaRepository.findAll(pageable);
+        Page<Product> productList = null;
+
+        if(college == "" && department == "" && professor == "" && subjectName == ""){
+            productList = productJpaRepository.findAll(pageable);
+        }
+        else{
+            List<Subject> subjects = subjectCustomRepository.findSubjects(
+                    college, department, professor, subjectName);
+            productList = productJpaRepository.findBySubjectIn(pageable, subjects);
+        }
 
         List<FindProductsDto> findProductsDtoList = new ArrayList<>();
 
@@ -95,7 +105,12 @@ public class ProductService {
 //            String pictureUrl = productPicture.getUrl();
 
             findProductsDtoList.add(
-                    new FindProductsDto(product.getProductName(), product.getSeller().getNickname(), product.getPrice())
+                    FindProductsDto.builder()
+                            .productId(product.getId())
+                            .productName(product.getProductName())
+                            .price(product.getPrice())
+                            .seller(product.getSeller().getNickname())
+                            .build()
             );
         }
 
@@ -104,7 +119,7 @@ public class ProductService {
 
     @Transactional
     public void updateProduct(Long productId, CreateProductDto updateProductDto) throws IOException {
-        findUser(updateProductDto);
+//        findUser(updateProductDto);
 
         Product findedProduct = productJpaRepository.findById(productId)
                 .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
@@ -130,8 +145,30 @@ public class ProductService {
         productJpaRepository.delete(findedProduct);
     }
 
-    private User findUser(CreateProductDto createProductDto){
-        return userJpaRepositoryForProduct.findUserByEmail(createProductDto.getSellerEmail())
+    public List<BuyProductDto> findBuyProducts(int page, User user){
+        Pageable pageable = PageRequest.of(page, 10);
+
+//        User findBuyer = userJpaRepositoryForProduct.findById(1L).orElseThrow();
+        User findBuyer = findUser(user);
+        Page<Order> orders = orderJpaRepository.findOrderByBuyer(findBuyer, pageable);
+
+        List<BuyProductDto> buyProductDtos = new ArrayList<>();
+        for(Order order : orders){
+            buyProductDtos.add(
+                    BuyProductDto.builder()
+                            .productId(order.getProduct().getId())
+                            .price(order.getMoney())
+                            .productName(order.getProduct().getProductName())
+                            .seller(order.getSeller().getNickname())
+                            .build()
+            );
+        }
+
+        return buyProductDtos;
+    }
+
+    private User findUser(User user){
+        return userJpaRepositoryForProduct.findUserByEmail(user.getEmail())
                 .orElseThrow(() -> new Exception404(ProductExceptionStatus.USER_NOT_FOUND.getErrorMessage()));
     }
 
@@ -159,7 +196,7 @@ public class ProductService {
                         .price(createProductDto.getPrice())
                         .description(createProductDto.getDescription())
                         .author(createProductDto.getAuthor())
-                        .pubDate(createProductDto.getPubDate())
+                        .pubDate(LocalDateTime.now())
                         .saleStatus(SaleStatus.NOT_YET)
                         .underline(createProductDto.getUnderline())
                         .note(createProductDto.getNote())
@@ -169,15 +206,13 @@ public class ProductService {
                         .build());
     }
 
-    private void saveImages(List<MultipartFile> imageFiles, Product product) throws IOException {
-        for(MultipartFile imageFile : imageFiles){
+    private void saveImage(MultipartFile imageFile, Product product) throws IOException {
             String imageUrl = s3Uploader.uploadFile(imageFile);
             productPictureJpaRepository.save(
                     ProductPicture.builder()
                             .url(imageUrl)
                             .product(product)
                             .build());
-        }
     }
 
     private Location saveLocation(CreateProductDto createProductDto){
