@@ -63,9 +63,10 @@
             },
             success: function (data) {
                 data.content.forEach(product => {
+
                     $('#product-list').append(
                         '<div class="col">' +
-                        '<a href="/products/{productId}" class="card-link">' +
+                        '<a href="/products/"' + product.productId + ' class="card-link">' +
                         '<div class="card">' +
                         '<div class="card-body">' +
                         '<h5 class="card-title">' + product.productName + '</h5>' +
