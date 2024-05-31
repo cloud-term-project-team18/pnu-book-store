@@ -22,13 +22,13 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
-    show-sql: true
+      ddl-auto: update
+    show-sql: false
     database-platform: org.hibernate.dialect.MySQLDialect
     properties:
       hibernate:
-        format_sql: true
         default_batch_fetch_size: 100
+        format_sql: false
 
     open-in-view: false
 

@@ -24,12 +24,13 @@ import org.example.pnubookstore.willdelete.repository.AuctionJpaRepository;
 import org.example.pnubookstore.domain.user.repository.UserJpaRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
-// @Profile({"dev"})
+@Profile({"dev"})
 @RequiredArgsConstructor
 @Component
 public class TestCase implements ApplicationRunner {
