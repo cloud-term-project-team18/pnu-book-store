@@ -174,12 +174,8 @@ public class ProductService {
     }
 
     private Subject findSubject(CreateProductDto createProductDto){
-        List<Subject> result = subjectJpaRepository.findAllBySubjectNameAndCollegeAndDepartmentAndProfessor(
-            createProductDto.getSubjectName(), createProductDto.getCollege(), createProductDto.getDepartment(), createProductDto.getProfessor());
-        if (result.isEmpty())
-            throw new Exception404(ProductExceptionStatus.SUBJECT_NOT_FOUND.getErrorMessage());
-
-        return result.get(0);
+        return subjectJpaRepository.findBySubjectNameAndCollegeAndDepartmentAndProfessor(
+            createProductDto.getSubjectName(), createProductDto.getCollege(), createProductDto.getDepartment(), createProductDto.getProfessor());;
     }
 
     private Subject saveSubject(CreateProductDto createProductDto){

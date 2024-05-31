@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface SubjectJpaRepository extends JpaRepository<Subject, Long> {
 
-    List<Subject> findAllBySubjectNameAndCollegeAndDepartmentAndProfessor(
+    Subject findBySubjectNameAndCollegeAndDepartmentAndProfessor(
             @Param("subjectName") String subjectName,
             @Param("college") String college,
             @Param("department") String department,
