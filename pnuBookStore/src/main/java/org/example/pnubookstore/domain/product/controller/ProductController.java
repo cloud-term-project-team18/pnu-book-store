@@ -35,13 +35,13 @@ public class ProductController {
         return "board/auction-detail.html";
     }
 
-    @GetMapping(value = "/product")
+    @GetMapping(value = "/product-register")
     public String productPage(){
         // 물품 등록 페이지
         return "board/product-register.html";
     }
 
-    @PostMapping(value = "/product")
+    @PostMapping(value = "/product-register")
     public String registerProduct(CreateProductDto createProductDto,
                                   @AuthenticationPrincipal CustomUserDetails userDetails) throws IOException {
         productService.createProduct(createProductDto, userDetails.getUser());
