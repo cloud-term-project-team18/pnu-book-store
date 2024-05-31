@@ -1,5 +1,6 @@
 package org.example.pnubookstore.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Null;
 import org.example.pnubookstore.domain.user.dto.CreateUserDto;
 import org.example.pnubookstore.domain.user.entity.EmailVerification;
@@ -37,9 +38,9 @@ public class UserController {
         return "email-verification";
     }
     @PostMapping("/sendVerificationCode")
-    public String emailVerify(@RequestParam String email){
+    public String emailVerify(@RequestParam String email, HttpServletRequest request){
 
-        userService.emailVerify(email);
+        userService.emailVerify(email, request);
 
         return "index"; // 이메일 전송이 완료됐다는 표시, 리다이렉트
     }
