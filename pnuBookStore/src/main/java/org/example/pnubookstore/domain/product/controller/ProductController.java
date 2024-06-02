@@ -52,7 +52,8 @@ public class ProductController {
     @GetMapping(value = "/myPage")
     public String myPage(Model model, @RequestParam(value="page", defaultValue="0") int page,
                          @AuthenticationPrincipal CustomUserDetails userDetails){
-        model.addAttribute("products", productService.findBuyProducts(page, userDetails.getUser()));
+        model.addAttribute("buyProducts", productService.findBuyProducts(page, userDetails.getUser()));
+        model.addAttribute("saleProducts", productService.findSaleProducts(page, userDetails.getUser()));
         return "myPage.html";
     }
 }

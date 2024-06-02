@@ -2,6 +2,7 @@ package org.example.pnubookstore.domain.product.repository;
 
 import org.example.pnubookstore.domain.product.entity.Product;
 import org.example.pnubookstore.domain.product.entity.Subject;
+import org.example.pnubookstore.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,4 +22,6 @@ public interface ProductJpaRepository extends JpaRepository<Product, Long> {
     List<Product> findAll();
 
     Page<Product> findBySubjectIn(Pageable pageable, List<Subject> subjects);
+
+    Page<Product> findBySeller(Pageable pageable, User seller);
 }
