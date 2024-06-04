@@ -223,7 +223,7 @@ public class ProductService {
     }
 
     private void saveImage(MultipartFile imageFile, Product product) throws IOException {
-            String imageUrl = s3Uploader.uploadFile(imageFile);
+            String imageUrl = s3Uploader.upload(imageFile, "images");
             productPictureJpaRepository.save(
                     ProductPicture.builder()
                             .url(imageUrl)
