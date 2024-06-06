@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -189,6 +190,21 @@ public class ProductService {
                 .nickname(findUser.getNickname())
                 .email(findUser.getEmail())
                 .build();
+    }
+
+    public FindProductDto findBuyProduct(Long productId, User buyer){
+        Product foundBuyProduct = productJpaRepository.findByIdFetchJoin(productId)
+                .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
+
+        Order foundOrder = orderJpaRepository.findOrderByBuyerAndProduct(buyer, foundBuyProduct)
+                .orElseThrow(() -> new Exception404(ProductExceptionStatus.ORDER_NOT_FOUND.getErrorMessage()));
+
+        ProductPicture productPicture = productPictureJpaRepository.findByProduct(foundBuyProduct)
+                .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_PICTURES_NOT_FOUND.getErrorMessage()));
+
+
+        return FindProductDto.of(foundBuyProduct, productPicture.getUrl());
+//        return FindProductDto.of(foundBuyProduct, "http://example.com");
     }
 
     private User findUser(User user){

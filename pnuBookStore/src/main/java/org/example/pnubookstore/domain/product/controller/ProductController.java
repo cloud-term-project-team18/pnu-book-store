@@ -57,4 +57,11 @@ public class ProductController {
         model.addAttribute("saleProducts", productService.findSaleProducts(page, userDetails.getUser()));
         return "myPage.html";
     }
+
+    @GetMapping(value = "/myPage/buyProudcts/{productId}")
+    public String buyProductDetail(Model model, @PathVariable("productId") Long productId,
+                                   @AuthenticationPrincipal CustomUserDetails userDetails){
+        model.addAttribute("product", productService.findBuyProduct(productId, userDetails.getUser()));
+        return "buyProduct.html"; // 임시 파일명
+    }
 }
