@@ -236,7 +236,7 @@ public class ProductService {
                 Location.builder()
                         .buildingName(createProductDto.getBuildingName())
                         .lockerNumber(createProductDto.getLockerNumber())
-                        .password(passwordEncoder.encode(createProductDto.getPassword()))
+                        .password(createProductDto.getPassword())
                         .build()
         );
     }
