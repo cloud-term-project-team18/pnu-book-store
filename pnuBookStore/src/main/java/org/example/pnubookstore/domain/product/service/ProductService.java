@@ -183,6 +183,14 @@ public class ProductService {
         return saleProductDtos;
     }
 
+    public FindUserDto findUserInfo(User user){
+        User findUser = findUser(user);
+        return FindUserDto.builder()
+                .nickname(findUser.getNickname())
+                .email(findUser.getEmail())
+                .build();
+    }
+
     private User findUser(User user){
         return userJpaRepositoryForProduct.findUserByEmail(user.getEmail())
                 .orElseThrow(() -> new Exception404(ProductExceptionStatus.USER_NOT_FOUND.getErrorMessage()));
