@@ -1,0 +1,59 @@
+name: CI/CD
+
+on:
+    push:
+        branches:
+            - main
+
+env:
+    IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+    ci:
+      runs-on: ubuntu-latest
+
+      steps:
+          - name: Checkout code
+            uses: actions/checkout@v4
+
+          - name: Login to NCP Registry
+            id: login_registry
+            run: |
+              cd pnu-book-store/pnuBookStore
+              docker login ${{ secrets.REGISTRY }} --username ${{ secrets.ACCESS_TOKEN }} --password ${{ secrets.SECRET_TOKEN }}
+        
+          - name: Docker Build
+            run: |
+              cd pnu-book-store/pnuBookStore
+              docker build -t ${{ secrets.REGISTRY }}/${{secrets.REPOSITORY}}:$IMAGE_TAG .
+              docker push ${{ secrets.REGISTRY }}/${{secrets.REPOSITORY}}:$IMAGE_TAG
+    cd:
+      needs: [ ci ]
+      runs-on: ubuntu-latest
+      steps:
+        - name: Set up Git
+          run: |
+            git config --global user.name 'github-actions[bot]'
+            git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+        - name: Checkout DevOps Code
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+            repository: cloud-term-project-team18/pnu-book-store-devops
+            ref: main
+            token: ${{ secrets.GITHUB_TOKEN }}
+
+        - name: Update Kustomize Image Tag
+          run: |
+            cd pnu-book-store-devops/terraform/k8s/web
+            kustomize edit set image jotunlmn.kr.private-ncr.ntruss.com/docker-pnu-bookstore-spring:jotunlmn.kr.private-ncr.ntruss.com/docker-pnu-bookstore-spring:${{ github.sha }}
+        
+        - name: Commit and Push
+          run: |
+            cd pnu-book-store-devops
+            git add pnu-book-store-devops/terraform/k8s/web
+            git commit -m "Update image tag to ${{ github.sha }}"
+            git push
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
