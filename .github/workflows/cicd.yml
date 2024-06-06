@@ -34,8 +34,7 @@ jobs:
 
         - name: Set up Git
           run: |
-            git config --global user.name 'github-actions[bot]'
-            git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+            
 
         - name: Checkout DevOps Code
           uses: actions/checkout@v4
@@ -43,7 +42,7 @@ jobs:
             fetch-depth: 0
             repository: cloud-term-project-team18/pnu-book-store-devops
             ref: main
-            token: ${{ secrets.GITHUB_TOKEN }}
+            token: ${{ secrets.PAT }}
 
         - name: Update Kustomize Image Tag
           working-directory: terraform/k8s/web
@@ -52,8 +51,8 @@ jobs:
         
         - name: Commit and Push
           run: |
+            git config --global user.name 'train0303'
+            git config --global user.email 'rjsdnxogh55@gmail.com'
             git add terraform/k8s/web
             git commit -m "Update image tag to ${{ github.sha }}"
             git push
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
