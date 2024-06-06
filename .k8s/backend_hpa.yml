@@ -24,11 +24,11 @@ spec:
       - type: Pods
         value: 2
         periodSeconds: 60
-        selectPolicy: Min
+      selectPolicy: Min
     scaleUp:
       stabilizationWindowSeconds: 300
       policies:
       - type: Pods
         value: 2
         periodSeconds: 60
-        selectPolicy: Max
+      selectPolicy: Max
