@@ -31,4 +31,4 @@ spec:
       - type: Pods
         value: 2
         periodSeconds: 60
-      selectPolicy: Max
+        selectPolicy: Max
