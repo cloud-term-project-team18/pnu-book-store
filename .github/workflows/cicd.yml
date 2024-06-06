@@ -32,10 +32,6 @@ jobs:
       runs-on: ubuntu-latest
       steps:
 
-        - name: Set up Git
-          run: |
-            
-
         - name: Checkout DevOps Code
           uses: actions/checkout@v4
           with:
@@ -47,7 +43,7 @@ jobs:
         - name: Update Kustomize Image Tag
           working-directory: terraform/k8s/web
           run: |
-            kustomize edit set image jotunlmn.kr.private-ncr.ntruss.com/docker-pnu-bookstore-spring:jotunlmn.kr.private-ncr.ntruss.com/docker-pnu-bookstore-spring:${{ github.sha }}
+            kustomize edit set image jotunlmn.kr.private-ncr.ntruss.com/docker-pnu-bookstore-spring=jotunlmn.kr.private-ncr.ntruss.com/docker-pnu-bookstore-spring:${{ github.sha }}
         
         - name: Commit and Push
           run: |
