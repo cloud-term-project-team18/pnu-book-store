@@ -3,4 +3,5 @@ kind: Kustomization
 namespace: web
 resources: 
   - backend.yml
-  - ingress.yml
+  - backend_ingress.yml
+  - backend_hpa.yml

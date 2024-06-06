@@ -32,7 +32,7 @@ spec:
           resources:          
             limits:
               cpu: "500m"
-              memory: "2Gi"
+              memory: "1Gi"
           ports:
             - name: spring
               containerPort: 8080
@@ -41,7 +41,9 @@ spec:
         - name: nginx
           image: nginx:latest
           ports:
-          - containerPort: 80
+          - name: nginx
+            containerPort: 80
+            protocol: TCP
           volumeMounts:
           - name: nginx-logs
             mountPath: /var/log/nginx
@@ -78,7 +80,9 @@ spec:
   selector:
     app: backend
   ports:
-  - protocol: TCP
+  - name: backend
+    protocol: TCP
+    nodePort: 30080
     port: 80
     targetPort: 80
   type: NodePort
@@ -121,9 +125,6 @@ data:
             }
 
             location / {
-                if ($http_host !~* ^(www\.pnubookstore\.shop|pnubookstore\.shop)$) {
-                    return 444;
-                }
                 proxy_pass http://localhost:8080;
                 proxy_set_header Host $http_host;
                 proxy_set_header X-Real-IP $remote_addr;
