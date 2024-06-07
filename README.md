@@ -35,6 +35,7 @@
 > 구매자에게 지정된 위치와 비밀번호를 공유해 비대면으로 거래가 진행될 수 있도록 합니다.
 
 ## 관련 기술/논문/특허 조사내용 소개
+![사용 기술](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/stack.png)
 > **Server**
 >  * Spring boot : Web Application Server
 >  * NGINX : Web Server
