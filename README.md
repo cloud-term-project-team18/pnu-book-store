@@ -96,6 +96,20 @@
 ## 활용방안 소개
 >  * 구매자는 저렴한 가격으로 중고서적을 구매하고, 판매자는 더 이상 사용하지 않는 전공서적을 판매함으로써 경제적 부담을 줄일 수 있다.
 
+## 부하테스트 실행 결과
+> **부하 테스트 실행**
+> ![](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/cloud4.png)
+
+> **노드 스케일링**
+> ![](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/cloud1.png)
+
+> **Pod 스케일링**
+> ![](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/cloud2.png)
+
+> **스케일링결과**
+> ![](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/cloud3.png)
+
+
 ## UI소개
 > **메인페이지**
 > ![index1](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/index1.png)
