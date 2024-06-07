@@ -50,7 +50,18 @@
 >  * Terraform : 코드형 인프라스트럭쳐(IaC) 자동화 도구
 >  * Naver Cloud Platform : 클라우드 컴퓨팅 서비스
 ## 프로젝트 개발 결과물 소개
-
+> **Architecture**
+> ![architecture](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/architecture.png)
+> **Auto Scaling**
+> ![autoscaling](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/AutoScaling.png)
+> **이메일 인증 과정**
+> ![email_verification](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/email_verification.png)
+> **동적 쿼리를 이용한 검색 필터**
+> ![search](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/search.gif)
+> **CI/CD**
+> ![CICD](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/CICD.png)
+> **Batch**
+> ![batch](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/batch.png)
 ## 사용방법
 >  * 웹 브라우저를 통해 사이트에 접속이 가능하다.
 >  * 페이지의 login, signUp 버튼을 통해 로그인, 회원가입이 가능하다.
