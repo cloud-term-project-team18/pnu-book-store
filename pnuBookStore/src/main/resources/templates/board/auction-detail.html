@@ -29,9 +29,9 @@
             <p class="card-text"><small class="text-muted" th:text="'페이지 변색 : ' + (${product.discolor} ? '예' : '아니오')">페이지 변색 : 예</small></p>
             <p class="card-text"><small class="text-muted" th:text="'페이지 훼손 : ' + (${product.damage} ? '예' : '아니오')">페이지 훼손 : 예</small></p>
             <div th:if="${product.saleStatus} != ${T(org.example.pnubookstore.domain.product.entity.constant.SaleStatus).NOT_YET}">
-                <form th:if="${#authorization.expression('isAuthenticated()') and #authentication.getName() != product.seller}" th:action="@{/order}" method="post">
+                <form th:if="${#authorization.expression('isAuthenticated()') and #authentication.principal.getUsername() != product.sellerEmail}" th:action="@{/order}" method="post">
                     <input type="hidden" name="productId" th:value="${product.productId}">
-                    <input type="hidden" name="sellerNickname" th:value="${product.seller}">
+                    <input type="hidden" name="sellerNickname" th:value="${product.sellerName}">
                     <input type="hidden" name="price" th:value="${product.price}">
                     <button class="btn btn-success" type="submit">구매하기</button>
                 </form>
