@@ -31,7 +31,7 @@
             <div th:if="${buyProducts != null}">
                 <div class="row row-cols-1 row-cols-md-2 g-4">
                     <div th:each="product : ${buyProducts}" class="col">
-                        <a th:href="@{/products/{id}(id=${product.productId})}" class="card-link">
+                        <a th:href="@{/myPage/buyProducts/{id}(id=${product.productId})}" class="card-link">
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title" th:text="${product.productName}">상품 이름</h5>
