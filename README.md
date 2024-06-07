@@ -63,17 +63,31 @@
 > **Auto Scaling**
 > ![autoscaling](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/AutoScaling.png)
 
+> HTTP로 들어오는 트래픽은 HTTPS로 자동 리다이렉트되어 보안을 유지한다. 로드 밸런서는 설정된 규칙에 따라 트래픽을 백엔드 서비스 그룹으로 라우팅한다.
+
+> 노드 풀 아래에는 여러 노드가 배치되어 있으며, 각 노드엔 Nginx와 백엔드 서버가 포함된 Pod가 존재한다. 오토스케일링 기능을 통해 자동으로 노드 및 파드의 수를 조정해 트래픽 변동에 따른 자원을 효율적으로 관리할 수 있다.
+
 > **이메일 인증 과정**
 > ![email_verification](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/email_verification.png)
+
+> 사설 서브넷에는 Spring 애플리케이션이 포함된 Pod가 배치되어있다. Pod는 SMTP 프로토콜을 사용해 이메일을 전송한다. 공개 서브넷엔 NAT가 위치해 사설 네트워크에서 발생하는 이메일 트래픽을 외부로 전송한다. 이메일은 NAT를 거쳐 IGT를 통해 인터넷에 접속하고, 외부 이메일 서비스로 전송된다.
 
 > **동적 쿼리를 이용한 검색 필터**
 > ![search](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/search.gif)
 
+> 동적 쿼리를 이용해 UI에의 입력에 따라 쿼리를 생성하고 실행해 결과를 반환한다. 사용자의 입력을 기반으로 SQL쿼리문을 작성하고, 데이터는 JSON형식으로 클라이언트에 전송하고 AJAX를 사용해 화면에 정보를 출력한다.
+
 > **CI/CD**
 > ![CICD](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/CICD.png)
 
+> 개발자는 코드 변경사항을 BackEnd GitHub 레포지토리에 push한다. 이벤트를 GitHub Actions가 받아 코드를 자동으로 빌드하고 테스트하며, 빌드된 이미지를 Naver Container Registry에 푸시한다.
+
+> DevOps 팀원은 필요한 k8s manifests파일을 리포지토리에 업데이트하고 push한다. ArgoCD는 레포지토리를 주기적으로 폴링해 변경사항을 감지하고, 감지된 변경사항을 k8s 클러스터에 자동으로 적용한다.
+
 > **Batch**
 > ![batch](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/batch.png)
+
+> DevOps 엔지니어는 'kubectl'을 통해 k8s 클러스터 내에서 배치 작업을 구성, 실행한다. 결과는 MySQL 데이터베이스에 저장되고, 이 데이터베이스는 VPC 내에 위치해 데이터의 보안과 무결성을 유지한다.
 
 ## 사용방법
 >  * 웹 브라우저를 통해 사이트에 접속이 가능하다.
