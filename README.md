@@ -55,7 +55,9 @@
 > ![architecture](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/architecture.png)
 
 > Terraform을 사용해 구축된 Naver Cloud Platform 상의 Kubernetes 아키텍쳐이다. 공개 서브셋에 위치한 ALB Ingress Controller는 외부 트래픽을 라우팅한다. private subnet에선 NginX와 Spring을 통해 웹 서비스를 제공하고, Fluent-Bit으로 로그를 수집한다.
+
 > 데이터베이스는 MySQL과 redis를 통해 이루어지고, 각각 데이터 저장과 세션 관리를 담당한다. 로그 관리는 ElasticSearch와 Kibana를 사용한다.
+
 > ArgoCD를 통해 리소스의 지속적인 배포 및 업데이트를 관리한다. NAT Gateway를 통해 프라이빗 네트워크 내의 자원이 인터넷에 접근할 수 있게한다. 
 
 > **Auto Scaling**
