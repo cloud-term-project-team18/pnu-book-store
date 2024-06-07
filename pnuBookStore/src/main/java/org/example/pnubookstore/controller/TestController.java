@@ -29,7 +29,7 @@ public class TestController {
                                                   ) throws IOException {
 //        userDetails.getUser();
 //        @AuthenticationPrincipal CustomUserDetails userDetails
-        String url = s3Uploader.uploadFile(imageFile);
+        String url = s3Uploader.upload(imageFile, "images");
         return ResponseEntity.ok(url);
     }
 

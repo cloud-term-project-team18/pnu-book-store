@@ -14,10 +14,7 @@ import org.example.pnubookstore.domain.product.entity.Subject;
 import org.example.pnubookstore.domain.product.entity.constant.SaleStatus;
 import org.example.pnubookstore.domain.product.repository.*;
 import org.example.pnubookstore.domain.user.entity.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +24,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -84,7 +82,7 @@ public class ProductService {
     // 물품 리스트 조회
     // 물품명, 가격, 저자, 물품 이미지
     public Page<FindProductsDto> findProductList(int page, String college, String department, String professor, String subjectName){
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
         Page<Product> productList = null;
 
         if(college == "" && department == "" && professor == "" && subjectName == ""){
@@ -147,7 +145,7 @@ public class ProductService {
     }
 
     public List<BuyProductDto> findBuyProducts(int page, User user){
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
 
 //        User findBuyer = userJpaRepositoryForProduct.findById(1L).orElseThrow();
         User findBuyer = findUser(user);
@@ -166,6 +164,47 @@ public class ProductService {
         }
 
         return buyProductDtos;
+    }
+
+    public List<SaleProductDto> findSaleProducts(int page, User user){
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
+
+        Page<Product> findSaleProducts = productJpaRepository.findBySeller(pageable, user);
+
+        List<SaleProductDto> saleProductDtos = new ArrayList<>();
+        for(Product product : findSaleProducts){
+            saleProductDtos.add(SaleProductDto.builder()
+                    .productId(product.getId())
+                    .productName(product.getProductName())
+                    .saleStatus(product.getSaleStatus())
+                    .price(product.getPrice())
+                    .build());
+        }
+
+        return saleProductDtos;
+    }
+
+    public FindUserDto findUserInfo(User user){
+        User findUser = findUser(user);
+        return FindUserDto.builder()
+                .nickname(findUser.getNickname())
+                .email(findUser.getEmail())
+                .build();
+    }
+
+    public FindProductDto findBuyProduct(Long productId, User buyer){
+        Product foundBuyProduct = productJpaRepository.findByIdFetchJoin(productId)
+                .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_NOT_FOUND.getErrorMessage()));
+
+        Order foundOrder = orderJpaRepository.findOrderByBuyerAndProduct(buyer, foundBuyProduct)
+                .orElseThrow(() -> new Exception404(ProductExceptionStatus.ORDER_NOT_FOUND.getErrorMessage()));
+
+        ProductPicture productPicture = productPictureJpaRepository.findByProduct(foundBuyProduct)
+                .orElseThrow(() -> new Exception404(ProductExceptionStatus.PRODUCT_PICTURES_NOT_FOUND.getErrorMessage()));
+
+
+        return FindProductDto.of(foundBuyProduct, productPicture.getUrl());
+//        return FindProductDto.of(foundBuyProduct, "http://example.com");
     }
 
     private User findUser(User user){
@@ -208,7 +247,7 @@ public class ProductService {
     }
 
     private void saveImage(MultipartFile imageFile, Product product) throws IOException {
-            String imageUrl = s3Uploader.uploadFile(imageFile);
+            String imageUrl = s3Uploader.upload(imageFile, "images");
             productPictureJpaRepository.save(
                     ProductPicture.builder()
                             .url(imageUrl)
@@ -221,7 +260,7 @@ public class ProductService {
                 Location.builder()
                         .buildingName(createProductDto.getBuildingName())
                         .lockerNumber(createProductDto.getLockerNumber())
-                        .password(passwordEncoder.encode(createProductDto.getPassword()))
+                        .password(createProductDto.getPassword())
                         .build()
         );
     }

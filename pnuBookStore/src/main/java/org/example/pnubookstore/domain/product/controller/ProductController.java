@@ -52,7 +52,16 @@ public class ProductController {
     @GetMapping(value = "/myPage")
     public String myPage(Model model, @RequestParam(value="page", defaultValue="0") int page,
                          @AuthenticationPrincipal CustomUserDetails userDetails){
-        model.addAttribute("products", productService.findBuyProducts(page, userDetails.getUser()));
+        model.addAttribute("user", productService.findUserInfo(userDetails.getUser()));
+        model.addAttribute("buyProducts", productService.findBuyProducts(page, userDetails.getUser()));
+        model.addAttribute("saleProducts", productService.findSaleProducts(page, userDetails.getUser()));
         return "myPage.html";
+    }
+
+    @GetMapping(value = "/myPage/buyProducts/{productId}")
+    public String buyProductDetail(Model model, @PathVariable("productId") Long productId,
+                                   @AuthenticationPrincipal CustomUserDetails userDetails){
+        model.addAttribute("product", productService.findBuyProduct(productId, userDetails.getUser()));
+        return "board/buy-auction-detail.html"; // 임시 파일명
     }
 }
