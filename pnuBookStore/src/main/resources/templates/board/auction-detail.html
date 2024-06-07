@@ -6,9 +6,8 @@
     <title>거래 상세 페이지</title>
     <style>
         .fixed-size-img {
-            width: 200px; /* 원하는 너비로 설정 */
-            height: 200px; /* 원하는 높이로 설정 */
-            object-fit: cover; /* 이미지 비율을 유지하면서 영역을 채움 */
+            width: auto;
+            height: 300px;
         }
     </style>
 </head>
@@ -29,7 +28,7 @@
             <p class="card-text"><small class="text-muted" th:text="'페이지 변색 : ' + (${product.discolor} ? '예' : '아니오')">페이지 변색 : 예</small></p>
             <p class="card-text"><small class="text-muted" th:text="'페이지 훼손 : ' + (${product.damage} ? '예' : '아니오')">페이지 훼손 : 예</small></p>
             <div th:if="${product.saleStatus} != ${T(org.example.pnubookstore.domain.product.entity.constant.SaleStatus).NOT_YET}">
-                <form th:if="${#authorization.expression('isAuthenticated()') and #authentication.getName() != product.sellerName}" th:action="@{/order}" method="post">
+                <form th:if="${#authorization.expression('isAuthenticated()') and #authentication.getUsername() != product.sellerEmail}" th:action="@{/order}" method="post">
                     <input type="hidden" name="productId" th:value="${product.productId}">
                     <input type="hidden" name="sellerNickname" th:value="${product.sellerName}">
                     <input type="hidden" name="price" th:value="${product.price}">
