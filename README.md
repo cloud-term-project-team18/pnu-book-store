@@ -40,11 +40,13 @@
 >  * NGINX : Web Server
 >  * MySQL : Data 저장을 위한 RDBMS
 >  * redis : session 정보 저장을 위한 In-Memory DB
+
 > **Devops**
 >  * kubernetes : 컨테이너를 쉽고 빠르게 배포/확장하고 관리를 자동화해주는 오픈소스 플랫폼
 >  * HELM : 쿠버네티스 어플리케이션 패키징 툴
 >  * GitHub Actions : CI(Continuous Integration)
 >  * argo : CD(Continuous Delivery)
+
 > **Infra**
 >  * Terraform : 코드형 인프라스트럭쳐(IaC) 자동화 도구
 >  * Naver Cloud Platform : 클라우드 컴퓨팅 서비스
