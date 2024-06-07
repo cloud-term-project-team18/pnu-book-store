@@ -58,10 +58,10 @@ public class ProductController {
         return "myPage.html";
     }
 
-    @GetMapping(value = "/myPage/buyProudcts/{productId}")
+    @GetMapping(value = "/myPage/buyProducts/{productId}")
     public String buyProductDetail(Model model, @PathVariable("productId") Long productId,
                                    @AuthenticationPrincipal CustomUserDetails userDetails){
         model.addAttribute("product", productService.findBuyProduct(productId, userDetails.getUser()));
-        return "buyProduct.html"; // 임시 파일명
+        return "board/buy-auction-detail.html"; // 임시 파일명
     }
 }
