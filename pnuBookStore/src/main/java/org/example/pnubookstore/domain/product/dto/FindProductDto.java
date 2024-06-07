@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 public class FindProductDto {
     private Long productId;
     private String sellerName;
+    private String sellerEmail;
     private String subjectName;
     private String professor;
     private String college;
@@ -41,6 +42,7 @@ public class FindProductDto {
         return FindProductDto.builder()
                 .productId(product.getId())
                 .sellerName(product.getSeller().getNickname())
+                .sellerEmail(product.getSeller().getEmail())
                 .subjectName(product.getSubject().getSubjectName())
                 .professor(product.getSubject().getProfessor())
                 .college(product.getSubject().getCollege())
