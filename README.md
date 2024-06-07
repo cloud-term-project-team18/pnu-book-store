@@ -50,20 +50,21 @@
 > **Infra**
 >  * Terraform : 코드형 인프라스트럭쳐(IaC) 자동화 도구
 >  * Naver Cloud Platform : 클라우드 컴퓨팅 서비스
+
 ## 프로젝트 개발 결과물 소개
 > **Architecture**
 > ![architecture](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/architecture.png)
 
-> Terraform을 사용해 구축된 Naver Cloud Platform 상의 Kubernetes 아키텍쳐이다. 공개 서브셋에 위치한 ALB Ingress Controller는 외부 트래픽을 라우팅한다. private subnet에선 NginX와 Spring을 통해 웹 서비스를 제공하고, Fluent-Bit으로 로그를 수집한다.
+> Terraform을 사용해 구축된 Naver Cloud Platform 상의 Kubernetes 아키텍쳐이다. 공개 서브셋에 위치한 ALB Ingress Controller는 외부 트래픽을 라우팅한다. private subnet1에선 NginX와 Spring을 통해 웹 서비스를 제공하고, Fluent-Bit으로 로그를 Elasticsearch로 전송한다.
 
-> 데이터베이스는 MySQL과 redis를 통해 이루어지고, 각각 데이터 저장과 세션 관리를 담당한다. 로그 관리는 ElasticSearch와 Kibana를 사용한다.
+> 데이터베이스는 MySQL과 redis를 통해 이루어지고, 각각 데이터 저장과 세션 관리를 담당한다. 로그 관리는 ElasticSearch, 시각화는는 Kibana를 사용한다.
 
 > ArgoCD를 통해 리소스의 지속적인 배포 및 업데이트를 관리한다. NAT Gateway를 통해 프라이빗 네트워크 내의 자원이 인터넷에 접근할 수 있게한다. 
 
-> **Auto Scaling**
+> **웹 어플리케이션 구성도**
 > ![autoscaling](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/AutoScaling.png)
 
-> HTTP로 들어오는 트래픽은 HTTPS로 자동 리다이렉트되어 보안을 유지한다. 로드 밸런서는 설정된 규칙에 따라 트래픽을 백엔드 서비스 그룹으로 라우팅한다.
+> HTTP로 들어오는 트래픽은 HTTPS로 자동 리다이렉트되어 보안을 유지한다. 로드 밸런서는 설정된 규칙에 따라 트래픽을 백엔드 서비스 그룹으로 전달한다.
 
 > 노드 풀 아래에는 여러 노드가 배치되어 있으며, 각 노드엔 Nginx와 백엔드 서버가 포함된 Pod가 존재한다. 오토스케일링 기능을 통해 자동으로 노드 및 파드의 수를 조정해 트래픽 변동에 따른 자원을 효율적으로 관리할 수 있다.
 
@@ -72,22 +73,17 @@
 
 > 사설 서브넷에는 Spring 애플리케이션이 포함된 Pod가 배치되어있다. Pod는 SMTP 프로토콜을 사용해 이메일을 전송한다. 공개 서브넷엔 NAT가 위치해 사설 네트워크에서 발생하는 이메일 트래픽을 외부로 전송한다. 이메일은 NAT를 거쳐 IGT를 통해 인터넷에 접속하고, 외부 이메일 서비스로 전송된다.
 
-> **동적 쿼리를 이용한 검색 필터**
-> ![search](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/search.gif)
-
-> 동적 쿼리를 이용해 UI에의 입력에 따라 쿼리를 생성하고 실행해 결과를 반환한다. 사용자의 입력을 기반으로 SQL쿼리문을 작성하고, 데이터는 JSON형식으로 클라이언트에 전송하고 AJAX를 사용해 화면에 정보를 출력한다.
-
 > **CI/CD**
 > ![CICD](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/CICD.png)
 
-> 개발자는 코드 변경사항을 BackEnd GitHub 레포지토리에 push한다. 이벤트를 GitHub Actions가 받아 코드를 자동으로 빌드하고 테스트하며, 빌드된 이미지를 Naver Container Registry에 푸시한다.
+> 개발자는 코드 변경사항을 BackEnd GitHub 레포지토리에 push한다. 이벤트를 GitHub Actions가 받아 코드를 자동으로 빌드하고 테스트하며, 빌드된 이미지를 Naver Container Registry에 푸시한다. 이후 GitHub Actions이 k8s manifests가 존재하는 레포지토리에 이미지 태그 변경사항을 업데이트하고 push한다. ArgoCD는 레포지토리를 주기적으로 폴링해 변경사항을 감지하고, 감지된 변경사항을 k8s 클러스터에 자동으로 적용한다.
 
-> DevOps 팀원은 필요한 k8s manifests파일을 리포지토리에 업데이트하고 push한다. ArgoCD는 레포지토리를 주기적으로 폴링해 변경사항을 감지하고, 감지된 변경사항을 k8s 클러스터에 자동으로 적용한다.
+> 또한 DevOps 팀원이 k8s manifests파일을 리포지토리에 업데이트하고 push한다. 이후 ArgoCD가 레포지토리를 주기적으로 폴링해 변경사항을 감지하고, 감지된 변경사항을 k8s 클러스터에 자동으로 적용한다.
 
 > **Batch**
 > ![batch](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/batch.png)
 
-> DevOps 엔지니어는 'kubectl'을 통해 k8s 클러스터 내에서 배치 작업을 구성, 실행한다. 결과는 MySQL 데이터베이스에 저장되고, 이 데이터베이스는 VPC 내에 위치해 데이터의 보안과 무결성을 유지한다.
+> DevOps 엔지니어는 'kubectl 명령어'를 통해 k8s 클러스터 내에서 수강편람 추출 배치 작업을 실행한다. 결과는 MySQL 데이터베이스에 저장되고, 이 데이터베이스는 VPC 내의 리소스만 접근할 수 있기에 데이터의 보안을 유지한다.
 
 ## 사용방법
 >  * 웹 브라우저를 통해 사이트에 접속이 가능하다.
