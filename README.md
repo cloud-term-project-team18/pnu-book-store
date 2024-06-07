@@ -95,3 +95,29 @@
 
 ## 활용방안 소개
 >  * 구매자는 저렴한 가격으로 중고서적을 구매하고, 판매자는 더 이상 사용하지 않는 전공서적을 판매함으로써 경제적 부담을 줄일 수 있다.
+
+## UI소개
+> **메인페이지**
+> ![index1](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/index1.png)
+
+> **이메일 인증 및 회원가입**
+> ![ev1](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/email_verification.png)
+> ![ev2](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/email_verification2.png)
+> ![ev3](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/email_verification3.png)
+> ![signUp](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/signUp.png)
+
+> **거래게시판**
+> ![board](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/search.gif)
+
+> **상세 페이지**
+> ![detail1](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/detail1.png)
+> ![detail2](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/detail2.png)
+
+> **물품 등록**
+> ![register](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/register.png)
+
+> **myPage**
+> ![myPage](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/myPage.png)
+
+> **구매 물품**
+> ![purchased](https://github.com/cloud-term-project-team18/pnu-book-store/blob/main/Purchased.png)
